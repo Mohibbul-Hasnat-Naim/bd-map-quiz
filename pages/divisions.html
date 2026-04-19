@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD Map Quiz</title>
+    <style>
+        :root {
+            --bd-green: #006a4e;
+            --bd-red: #f42a41;
+            --bg-color: #08c2b8;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            /* background: rgb(139, 139, 241); */
+        }
+
+        .result-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-card {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            width: 350px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .result-card h2 {
+            margin-top: 0;
+            color: var(--bd-green);
+        }
+
+        .result-line {
+            margin: 12px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* --- HUD (Fixed Overlays) --- */
+        .hud-top {
+            position: fixed;
+            top: 15px; left: 15px; right: 15px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 100;
+            /* background-color: gray; */
+        }
+
+        .hud-vertical {
+            position: fixed;
+            right: 15px;
+            top: 130px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 200;
+        }
+
+        .hud-vertical button {
+            width: 100px;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            border: none;
+        }
+
+        /* Skip → warning/red */
+        .hud-vertical .btn-skip {
+            background: #e74c3c;
+        }
+
+        /* Restart → green */
+        .hud-vertical .btn-restart {
+            background: #27ae60;
+        }
+
+        /* Learn → brown/earth tone */
+        .hud-vertical .btn-learn {
+            background: #8d6442;
+        }
+
+        .card {
+            background: white;
+            padding: clamp(8px, 1.2vw, 14px) clamp(10px, 1.8vw, 20px);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            pointer-events: none;
+            max-width: 45vw;
+            font-weight: bold;
+        }
+
+        #target-name {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 800;
+            color: var(--bd-green);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .stats-area {
+            text-align: left;
+            font-size: 1rem;
+            min-width: 100px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+            gap: 10px;
+            opacity: 1;
+        }
+
+        #status-msg {
+            font-weight: bold;
+            height: 24px;
+            line-height: 24px;
+            margin: 5px 0;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            transition: opacity 0.3s;
+            opacity: 0;
+            text-align: left;
+        }
+
+        .btn-group { display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end; }
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(241, 4, 4, 0.08);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* --- MAP CONTAINER --- */
+        .map-viewport {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .map-viewport:active {
+            cursor: grabbing;
+        }
+
+        svg {
+            height: 100%;
+            width: 100%;
+            max-width: none;
+        }
+
+        .map-region path {
+            cursor: pointer;
+            transition: all 0.25s ease;
+            stroke: #ffffff;
+            stroke-width: 1.5;
+        }
+
+        .map-region:not(.locked):not(.selected):hover path {
+            opacity: .4;
+        }
+
+        .selected path {
+            stroke: #ffb300;
+            stroke-width: 3;
+            opacity: 1;
+        }
+
+        .locked path {
+            fill: white !important;
+            stroke: blueviolet !important;
+            opacity: 1;
+            pointer-events: none;
+        }
+
+        .learn-mode .map-region path {
+            stroke: #333 !important;
+            stroke-width: 2.5;
+            opacity: 0.95;
+            pointer-events: none;
+        }
+
+        .division-label {
+            display: none;
+            font-size: 50px;
+            font-weight: 800;
+            fill: #111;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+
+            /* Better readability */
+            paint-order: stroke;
+            stroke: white;
+            stroke-width: 15px;
+            stroke-linejoin: round;
+        }
+
+        /* Show labels only in learn mode */
+        .learn-mode .division-label {
+            display: block;
+        }
+
+        .map-region path {
+            transform-origin: center;
+        }
+
+        .map-region:not(.locked):not(.selected):hover path {
+            transform: scale(1.01);
+        }
+
+        .locked path {
+            filter: brightness(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="result-modal" class="result-modal">
+        <div class="result-card">
+            <h2>QUIZ COMPLETED</h2>
+
+            <div class="result-line">
+                Time: <span id="final-time">00:00</span>
+            </div>
+
+            <div class="result-line">
+                Correct: <span id="final-correct">0</span>
+            </div>
+
+            <div class="result-line">
+                Attempts: <span id="final-attempts">0</span>
+            </div>
+
+            <div class="result-line">
+                Accuracy: <span id="final-accuracy">0%</span>
+            </div>
+
+            <div class="btn-group" style="justify-content:center; margin-top:20px;">
+                <button class="btn-learn" style="background: rgb(30, 245, 48); display: block;" onclick="resetGame()">Play Again</button>
+                <button class="btn-back" style="background: rgb(1, 211, 248); display:block;" onclick="toggleMode(true)">Learn Map</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-top">
+        <div class="card">
+            <small style="color:#0004fd">FIND DIVISION</small>
+            <span id="target-name">...</span>
+            <div id="status-msg">Correct!</div>
+        </div>
+
+        <div class="card stats-area">
+            <div class="stats-row">
+                <span>Score: </span>
+                <b id="score">0/0</b>
+            </div>
+
+            <div class="stats-row">
+                <span>Attempts: </span>
+                <b id="attempts">0</b>
+            </div>
+
+            <div class="stats-row">
+                <span>Time: </span>
+                <b id="live-timer">00:00</b>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-vertical">
+        <button id="mode-btn" class="btn-learn" onclick="toggleMode(true)">Learn Map</button>
+        <button class="btn-restart" onclick="resetGame()">Restart</button>
+        <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
+    </div>
+
+    <div class="map-viewport" id="map-viewport">
+        <svg
+            viewBox="0 0 1550 2150"
+            xmlns="http://www.w3.org/2000/svg"
+            id="main-svg"
+        >
+            <g id="map-layer"></g>
+        </svg>
+    </div>
+    
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script type="module">
+        import { startQuiz } from "../engine/quizEngine.js";
+        import { getDivisionsMap } from "../maps/divisions.js";
+
+        startQuiz({
+            mapDataProvider: getDivisionsMap,
+            sounds: {
+                correct: new Audio("../sounds/correct.mp3"),
+                wrong: new Audio("../sounds/wrong.mp3"),
+                skip: new Audio("../sounds/skip.mp3"),
+                victory: new Audio("../sounds/victory.mp3"),
+                mode: new Audio("../sounds/mode.mp3")
+            }
+        });
+    </script>
+</body>
+</html>
