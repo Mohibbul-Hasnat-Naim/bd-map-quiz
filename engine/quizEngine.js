@@ -32,6 +32,9 @@ export function startQuiz(config) {
 
     let hasStarted = false;
 
+    let soundEnabled = true;
+    let skippedCount = 0;
+
     function init() {
         mapData = mapDataProvider();
 
@@ -76,6 +79,7 @@ export function startQuiz(config) {
     window.resetGame = resetGame;
     window.skipQuestion = skipQuestion;
     window.toggleMode = toggleMode;
+    window.toggleSound = toggleSound;
 
     function startGame() {
         if (hasStarted) return;
@@ -84,6 +88,29 @@ export function startQuiz(config) {
         startTimer();
         nextQuestion();
         updateDisplay();
+    }
+
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+
+        const btn = document.getElementById("sound-toggle");
+
+        if (soundEnabled) {
+            btn.innerText = "🔊 Sound ON";
+        } else {
+            btn.innerText = "🔇 Sound OFF";
+        }
+    }
+
+    function playSound(soundType) {
+        if (!soundEnabled) return;
+
+        const sound = sounds[soundType];
+
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play?.();
+        }
     }
 
     function updateDisplay() {
@@ -174,7 +201,8 @@ export function startQuiz(config) {
         if (id === target) {
             score++;
 
-            sounds.correct?.play?.();
+            // sounds.correct?.play?.();
+            playSound("correct");
 
             el.classList.add("locked");
 
@@ -184,7 +212,8 @@ export function startQuiz(config) {
 
             nextQuestion();
         } else {
-            sounds.wrong?.play?.();
+            // sounds.wrong?.play?.();
+            playSound("wrong");
 
             setStatus(`✗ Wrong! ~ ${name}`, "var(--bd-red)");
         }
@@ -201,11 +230,13 @@ export function startQuiz(config) {
 
         if (!skipped.includes(target)) {
             skipped.push(target);
+            skippedCount++;
         }
 
         remaining = remaining.filter(d => d !== target);
 
-        sounds.skip?.play?.();
+        // sounds.skip?.play?.();
+        playSound("skip");
 
         nextQuestion();
     }
@@ -242,7 +273,8 @@ export function startQuiz(config) {
 
 
     function showResultModal() {
-        sounds.victory?.play?.();
+        // sounds.victory?.play?.();
+        playSound("victory");
 
         const totalTime = endTime - startTime;
         const accuracy = attempts ? Math.round((score / attempts) * 100) : 0;
@@ -250,17 +282,17 @@ export function startQuiz(config) {
         document.getElementById("final-time").innerText =
             formatTime(totalTime);
 
-        document.getElementById("final-correct").innerText =
-            `${score} / ${items.length}`;
-
+        document.getElementById("final-correct").innerText = `${score}/${items.length}`;
         document.getElementById("final-attempts").innerText = attempts;
+        document.getElementById("final-skipped").innerText = skippedCount;
         document.getElementById("final-accuracy").innerText = accuracy + "%";
 
         document.getElementById("result-modal").style.display = "flex";
     }
 
     function toggleMode() {
-        sounds.mode?.play?.();
+        // sounds.mode?.play?.();
+        playSound("mode");
 
         const body = document.body;
         const targetDisplay = document.getElementById(targetId);

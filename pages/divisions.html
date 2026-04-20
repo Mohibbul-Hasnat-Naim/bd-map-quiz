@@ -286,6 +286,10 @@
             </div>
 
             <div class="result-line">
+                Skipped: <span id="final-skipped">0</span>
+            </div>
+
+            <div class="result-line">
                 Accuracy: <span id="final-accuracy">0%</span>
             </div>
 
@@ -322,6 +326,7 @@
     </div>
 
     <div class="hud-vertical">
+        <button id="sound-toggle" onclick="toggleSound()">🔊 Sound ON</button>
         <button class="btn-home" 
         onclick="window.location.href='../index.html'">
             Home
