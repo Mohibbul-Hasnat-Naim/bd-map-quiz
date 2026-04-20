@@ -30,6 +30,8 @@ export function startQuiz(config) {
     let timerInterval = null;
     let timerRunning = false;
 
+    let hasStarted = false;
+
     function init() {
         mapData = mapDataProvider();
 
@@ -39,15 +41,25 @@ export function startQuiz(config) {
 
         const layer = d3.select("#" + svgContainerId);
 
-        // inject SVG
         layer.html(mapData.svg);
 
         const regions = layer.selectAll(".map-region");
 
-        // D3 event binding (replaces attachListeners)
         regions
             .style("cursor", "pointer")
-            .on("click", function (event, d) {
+            .on("click", function () {
+
+                if (document.body.classList.contains("learn-mode")) return;
+
+                // FIRST CLICK = ONLY START GAME
+                if (!hasStarted) {
+                    startGame();
+
+                    // IMPORTANT: do NOT evaluate this click
+                    return;
+                }
+
+                // after game started → normal logic
                 checkAnswer(this.id);
             });
 
@@ -55,13 +67,24 @@ export function startQuiz(config) {
 
         positionLabels();
         updateDisplay();
-        nextQuestion();
+
+        document.getElementById(targetId).innerText =
+            "Click on map to start";
     }
 
     // expose global UI hooks (needed for HTML buttons)
     window.resetGame = resetGame;
     window.skipQuestion = skipQuestion;
     window.toggleMode = toggleMode;
+
+    function startGame() {
+        if (hasStarted) return;
+
+        hasStarted = true;
+        startTimer();
+        nextQuestion();
+        updateDisplay();
+    }
 
     function updateDisplay() {
         document.getElementById(scoreId).innerText =
@@ -97,6 +120,11 @@ export function startQuiz(config) {
     }
 
     function nextQuestion() {
+        if (!hasStarted && !document.body.classList.contains("learn-mode")) {
+            document.getElementById(targetId).innerText =
+                "Click on map to start";
+            return;
+        }
 
         if (remaining.length === 0) {
             if (skipped.length > 0) {
@@ -108,10 +136,6 @@ export function startQuiz(config) {
                 setTimeout(showResultModal, 700);
                 return;
             }
-        }
-
-        if (!timerRunning && !document.body.classList.contains("learn-mode")) {
-            startTimer();
         }
 
         const i = Math.floor(Math.random() * remaining.length);
@@ -189,6 +213,7 @@ export function startQuiz(config) {
     function resetGame() {
         score = 0;
         attempts = 0;
+        hasStarted = false;
 
         remaining = [...items];
         skipped = [];
@@ -211,7 +236,8 @@ export function startQuiz(config) {
 
         updateDisplay();
 
-        nextQuestion();
+        document.getElementById(targetId).innerText =
+            "Click on map to start";
     }
 
 
