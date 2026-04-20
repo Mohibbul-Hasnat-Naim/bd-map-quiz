@@ -248,8 +248,9 @@
             stroke-linejoin: round;
         }
 
-        /* Show labels only in learn mode */
-        .learn-mode .division-label {
+        /* Show labels in learn, normal mode */
+        .learn-mode .division-label,
+        .show-labels .division-label {
             display: block;
         }
 
@@ -326,6 +327,7 @@
     </div>
 
     <div class="hud-vertical">
+        <button id="label-toggle" onclick="toggleLabels()">🏷 Labels OFF</button>
         <button id="sound-toggle" onclick="toggleSound()">🔊 Sound ON</button>
         <button class="btn-home" 
         onclick="window.location.href='../index.html'">

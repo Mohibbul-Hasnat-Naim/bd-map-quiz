@@ -33,6 +33,7 @@ export function startQuiz(config) {
     let hasStarted = false;
 
     let soundEnabled = true;
+    let labelsEnabled = false;
     let skippedCount = 0;
 
     function init() {
@@ -80,6 +81,7 @@ export function startQuiz(config) {
     window.skipQuestion = skipQuestion;
     window.toggleMode = toggleMode;
     window.toggleSound = toggleSound;
+    window.toggleLabels = toggleLabels;
 
     function startGame() {
         if (hasStarted) return;
@@ -110,6 +112,20 @@ export function startQuiz(config) {
         if (sound) {
             sound.currentTime = 0;
             sound.play?.();
+        }
+    }
+
+    function toggleLabels() {
+        labelsEnabled = !labelsEnabled;
+
+        const btn = document.getElementById("label-toggle");
+
+        if (labelsEnabled) {
+            btn.innerText = "🏷 Labels ON";
+            document.body.classList.add("show-labels");
+        } else {
+            btn.innerText = "🏷 Labels OFF";
+            document.body.classList.remove("show-labels");
         }
     }
 
@@ -206,6 +222,11 @@ export function startQuiz(config) {
 
             el.classList.add("locked");
 
+            const label = el.querySelector(".division-label");
+            if (label && !document.body.classList.contains("learn-mode")) {
+                label.style.display = "block";
+            }
+
             remaining = remaining.filter(d => d !== target);
 
             setStatus(`✓ Correct! ~ ${name}`, "var(--bd-green)");
@@ -251,6 +272,10 @@ export function startQuiz(config) {
 
         document.querySelectorAll(".map-region").forEach(el => {
             el.classList.remove("locked");
+        });
+
+        document.querySelectorAll(".division-label").forEach(label => {
+            label.style.display = "";
         });
 
         clearInterval(timerInterval);
