@@ -165,6 +165,9 @@
         .btn-home {
             background: #34495e;
         }
+        
+        .hud-vertical .btn-sound { background: #006a4e;}
+        .hud-vertical .btn-label { background: var(--bg-color);}
 
         .hud-vertical .btn-skip {
             background: #e74c3c;
@@ -327,15 +330,15 @@
     </div>
 
     <div class="hud-vertical">
-        <button id="label-toggle" onclick="toggleLabels()">🏷 Labels OFF</button>
-        <button id="sound-toggle" onclick="toggleSound()">🔊 Sound ON</button>
+        <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
+        <button class="btn-restart" onclick="resetGame()">Restart</button>
+        <button class="btn-label" id="label-toggle" onclick="toggleLabels()">🏷 Labels OFF</button>
+        <button class="btn-sound" id="sound-toggle" onclick="toggleSound()">🔊 Sound ON</button>
+        <button class="btn-learn" id="mode-btn" onclick="toggleMode(true)">Learn Map</button>
         <button class="btn-home" 
         onclick="window.location.href='../index.html'">
             Home
         </button>
-        <button id="mode-btn" class="btn-learn" onclick="toggleMode(true)">Learn Map</button>
-        <button class="btn-restart" onclick="resetGame()">Restart</button>
-        <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
     </div>
 
     <div class="map-viewport" id="map-viewport">
