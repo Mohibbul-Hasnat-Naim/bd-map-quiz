@@ -1,4 +1,4 @@
-export function startQuiz(config) {
+export async function startQuiz(config) {
 
     const {
         mapDataProvider,
@@ -36,8 +36,8 @@ export function startQuiz(config) {
     let labelsEnabled = false;
     let skippedCount = 0;
 
-    function init() {
-        mapData = mapDataProvider();
+    async function init() {
+        mapData = await mapDataProvider();
 
         items = [...mapData.items];
         remaining = [...mapData.items];
@@ -411,7 +411,7 @@ export function startQuiz(config) {
         // );
     }
 
-    init();
+    await init();
 
     return {
         resetGame,
