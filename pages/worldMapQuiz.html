@@ -82,6 +82,9 @@
             <option value="asia">Asia</option>
             <option value="europe">Europe</option>
             <option value="africa">Africa</option>
+            <option value="northAmerica">North America</option>
+            <option value="southAmerica">South America</option>
+            <option value="oceania">Oceania</option>
         </select>
         <button class="btn-restart" onclick="resetGame()">Restart</button>
         <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
@@ -122,7 +125,7 @@
 
     <script>
         window.changeMap = function(mapName) {
-            window.location.href = `?map=${mapName}`;
+            window.location.href = `worldMapQuiz.html?map=${mapName}`;
         };
     </script>
 
@@ -133,28 +136,64 @@
 
         const params = new URLSearchParams(window.location.search);
         const selectedMap = params.get("map") || "world";
+        document.getElementById("map-selector").value = selectedMap;
 
         let mapProvider;
 
         if (selectedMap === "world") {
             const module = await import("../maps/worldMapQuiz.js");
             mapProvider = module.getWorldMap;
+        } else {
+            const module = await import("../maps/continentMaps.js");
+
+            const mapFunctions = {
+                asia: module.getAsiaMap,
+                europe: module.getEuropeMap,
+                africa: module.getAfricaMap,
+                northAmerica: module.getNorthAmericaMap,
+                southAmerica: module.getSouthAmericaMap,
+                oceania: module.getOceaniaMap
+            };
+
+            mapProvider = mapFunctions[selectedMap];
         }
 
-        if (selectedMap === "asia") {
-            const module = await import("../maps/asiaMapQuiz.js");
-            mapProvider = module.getAsiaMap;
-        }
+        // if (selectedMap === "world") {
+        //     const module = await import("../maps/worldMapQuiz.js");
+        //     mapProvider = module.getWorldMap;
+        // }
 
-        if (selectedMap === "europe") {
-            const module = await import("../maps/europeMapQuiz.js");
-            mapProvider = module.getEuropeMap;
-        }
+        // if (selectedMap === "asia") {
+        //     const module = await import("../maps/asiaMapQuiz.js");
+        //     mapProvider = module.getAsiaMap;
+        // }
 
-        if (selectedMap === "africa") {
-            const module = await import("../maps/africaMapQuiz.js");
-            mapProvider = module.getAfricaMap;
-        }
+        // if (selectedMap === "europe") {
+        //     const module = await import("../maps/europeMapQuiz.js");
+        //     mapProvider = module.getEuropeMap;
+        // }
+
+        // if (selectedMap === "africa") {
+        //     const module = await import("../maps/africaMapQuiz.js");
+        //     mapProvider = module.getAfricaMap;
+        // }
+
+        // if (selectedMap === "southAmerica") {
+        //     const module = await import("../maps/southAmericaMapQuiz.js");
+        //     mapProvider = module.getSouthAmericaMap;
+        // }
+
+        // if (selectedMap === "northAmerica") {
+        //     const module = await import("../maps/northAmericaMapQuiz.js");
+        //     mapProvider = module.getNorthAmericaMap;
+        // }
+
+        // if (selectedMap === "oceania") {
+        //     const module = await import("../maps/oceaniaMapQuiz.js");
+        //     mapProvider = module.getOceaniaMap;
+        // }
+
+
 
         startQuiz({
             mapDataProvider: mapProvider,
