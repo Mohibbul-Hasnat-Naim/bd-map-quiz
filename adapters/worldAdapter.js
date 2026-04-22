@@ -1,3 +1,8 @@
+import {
+    allowedCountries,
+    removeItems
+} from "../config/worldCountries.js";
+
 export async function buildWorldMap() {
     const rawSvg = await fetch("../maps/world.svg")
         .then(res => res.text());
@@ -89,8 +94,25 @@ function extractItems(rawSvg) {
             name = path.getAttribute("name");
         }
 
-        set.add(normalize(name));
+        name = normalize(name);
+
+        // if (aliases[name]) {
+        //     name = aliases[name];
+        // }
+
+        set.add(name);
     });
 
-    return [...set];
+    const extracted = [...set];
+
+    const finalItems = extracted
+        .filter(item => !removeItems.includes(item))
+        .filter(item => allowedCountries.includes(item));
+
+        console.log("Total Extracted:", extracted.length);
+    console.log("Extracted:", extracted);
+    console.log("Total Final:", finalItems.length);
+    console.log("Final Items:", finalItems);
+
+    return finalItems;
 }
