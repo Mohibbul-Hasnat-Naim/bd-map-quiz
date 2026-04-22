@@ -1,6 +1,7 @@
 import {
     allowedCountries,
-    removeItems
+    removeItems,
+    aliases
 } from "../config/worldCountries.js";
 
 export async function buildWorldMap() {
@@ -31,10 +32,14 @@ function normalizeWorldSVG(rawSvg) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(rawSvg, "image/svg+xml");
 
-    const paths = [...doc.querySelectorAll("path")];
+    const regions = [
+        ...doc.querySelectorAll("path"),
+        ...doc.querySelectorAll("circle")
+    ];
+
     const grouped = {};
 
-    paths.forEach(path => {
+    regions.forEach(path => {
         let name =
             path.getAttribute("name") ||
             path.getAttribute("class") ||
@@ -47,6 +52,10 @@ function normalizeWorldSVG(rawSvg) {
         }
 
         name = normalize(name);
+        
+        if (aliases[name]) {
+            name = aliases[name];
+        }
 
         path.removeAttribute("class");
         path.removeAttribute("id");
@@ -79,10 +88,14 @@ function extractItems(rawSvg) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(rawSvg, "image/svg+xml");
 
-    const paths = [...doc.querySelectorAll("path")];
+    const regions = [
+        ...doc.querySelectorAll("path"),
+        ...doc.querySelectorAll("circle")
+    ];
+    
     const set = new Set();
 
-    paths.forEach(path => {
+    regions.forEach(path => {
         let name =
             path.getAttribute("name") ||
             path.getAttribute("class") ||
@@ -96,9 +109,9 @@ function extractItems(rawSvg) {
 
         name = normalize(name);
 
-        // if (aliases[name]) {
-        //     name = aliases[name];
-        // }
+        if (aliases[name]) {
+            name = aliases[name];
+        }
 
         set.add(name);
     });
@@ -109,10 +122,22 @@ function extractItems(rawSvg) {
         .filter(item => !removeItems.includes(item))
         .filter(item => allowedCountries.includes(item));
 
+        
+    // Debug Log
+    let debug = 0;
+    if (debug) {
         console.log("Total Extracted:", extracted.length);
-    console.log("Extracted:", extracted);
-    console.log("Total Final:", finalItems.length);
-    console.log("Final Items:", finalItems);
-
+        console.log("Extracted:", extracted);
+        console.log("Total Final:", finalItems.length);
+        console.log("Final Items:", finalItems);
+        
+        const missingCountries = allowedCountries.filter(
+            item => !finalItems.includes(item)
+        );
+        
+        console.log("Missing Countries:", missingCountries);
+        console.log("Missing Count:", missingCountries.length);
+    }
+        
     return finalItems;
 }
