@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World Map Quiz</title>
     <link rel="stylesheet" href="worldMapQuiz.css">
+    <link rel="stylesheet" href="preloading bar.css">
 </head>
 <body>
-
     <div id="result-modal" class="result-modal">
         <div class="result-card">
             <h2>QUIZ COMPLETED</h2>
@@ -83,8 +83,8 @@
             <option value="europe">Europe</option>
             <option value="africa">Africa</option>
         </select>
-        <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
         <button class="btn-restart" onclick="resetGame()">Restart</button>
+        <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
         <!-- <button class="btn-label" id="label-toggle" onclick="toggleLabels()">🏷 Labels OFF</button>
         <button class="btn-sound" id="sound-toggle" onclick="toggleSound()">🔊 Sound ON</button>
         <button class="btn-learn" id="mode-btn" onclick="toggleMode(true)">Learn Map</button>
@@ -114,6 +114,11 @@
         </svg>
     </div>
 </body>
+
+    <script type="module">
+        import { initLoader } from './preloading bar.js';
+        initLoader();
+    </script>    
 
     <script>
         window.changeMap = function(mapName) {

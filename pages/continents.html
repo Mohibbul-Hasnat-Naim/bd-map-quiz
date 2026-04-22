@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BD Map Quiz</title>
+    <link rel="stylesheet" href="preloading bar.css">
     <style>
         :root {
             --bd-green: #006a4e;
@@ -352,7 +353,12 @@
     </div>
 </body>
 
-<script src="https://d3js.org/d3.v7.min.js"></script>
+    <script type="module">
+        import { initLoader } from './preloading bar.js';
+        initLoader();
+    </script>
+    
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <script type="module">
         import { startQuiz } from "../engine/quizEngine.js";
