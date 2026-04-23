@@ -44,8 +44,12 @@ export async function startQuiz(config) {
         skipped = [];
 
         const layer = d3.select("#" + svgContainerId);
-
         layer.html(mapData.svg);
+
+        if (mapData.initialViewBox) {
+            d3.select("#main-svg")
+                .attr("viewBox", mapData.initialViewBox);
+        }
 
         const regions = layer.selectAll(".map-region");
 
