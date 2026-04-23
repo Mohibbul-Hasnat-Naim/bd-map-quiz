@@ -47,7 +47,7 @@ export async function buildContinentMap(allowedCountries) {
         path.removeAttribute("id");
 
         path.setAttribute("fill", "#7ed957");
-        path.setAttribute("stroke", "#ffffff");
+        path.setAttribute("stroke", "#f30707");
         path.setAttribute("stroke-width", "1.2");
 
         if (!grouped[name]) {

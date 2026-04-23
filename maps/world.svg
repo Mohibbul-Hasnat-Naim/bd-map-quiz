@@ -642,7 +642,13 @@ THE SOFTWARE.
  </path>
  <path d="M634.2 386l-0.4-0.1 0.2-0.3 0.3-0.1-0.1 0.5z" id="MF" name="Saint-Martin">
  </path>
- <path d="M1402.9 474.8l0 0.2-0.2-0.1 0.2-0.2 0 0.1z" id="MV" name="Maldives">
+ <path d="M1402.9 474.8l0 1.2-0.2-0.1 0.2-0.2 0 1.1z" style="transform: scale(2); transform-origin: center; transform-box: fill-box;" id="MV" name="Maldives">
+ </path>
+ <path d="M1402.9 482.8l0 1.2-0.2-0.1 0.2-0.2 0 1.1z" style="transform: scale(2); transform-origin: center; transform-box: fill-box;" id="MV" name="Maldives">
+ </path>
+ <path d="M1410.9 474.8l0 1.2-0.2-0.1 0.2-0.2 0 1.1z" style="transform: scale(2); transform-origin: center; transform-box: fill-box;" id="MV" name="Maldives">
+ </path>
+ <path d="M1410.9 482.8l0 1.2-0.2-0.1 0.2-0.2 0 1.1z" style="transform: scale(2); transform-origin: center; transform-box: fill-box;" id="MV" name="Maldives">
  </path>
  <path class="Malta" d="M 1063.9 271.7 1063.7 272 1063.2 271.8 1062.7 271.5 1062.7 271 1062.6 270.9 1063.2 270.9 1063.6 271.2 1063.8 271.4 1063.9 271.7 Z">
  </path>

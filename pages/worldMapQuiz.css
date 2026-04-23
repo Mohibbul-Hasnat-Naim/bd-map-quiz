@@ -197,25 +197,20 @@ svg {
 .map-region path {
     cursor: pointer;
     transition: all 0.25s ease;
-    stroke: #ff0000;
+    stroke: #002fff;
     stroke-width: 1.5;
 }
 
 .map-region:not(.locked):not(.selected):hover path {
-    opacity: .4;
-}
-
-.selected path {
-    stroke: #ffb300;
-    stroke-width: 3;
-    opacity: 1;
+    opacity: .25;
 }
 
 .locked path {
     /* fill: rgb(51, 240, 44) !important; */
-    stroke: blueviolet !important;
+    stroke: rgb(255, 0, 212) !important;
     stroke-width: 1.5;
     opacity: 0.4;
+    filter: brightness(1.05);
     pointer-events: none;
 }
 
@@ -247,19 +242,6 @@ svg {
 .show-labels .division-label {
     display: block;
 }
-
-.map-region path {
-    transform-origin: center;
-}
-
-.map-region:not(.locked):not(.selected):hover path {
-    transform: scale(1.01);
-}
-
-.locked path {
-    filter: brightness(1.05);
-}
-
 
 /* Result Card */
 

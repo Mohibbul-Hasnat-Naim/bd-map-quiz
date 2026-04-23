@@ -40,18 +40,6 @@
     </div>
 
     <div class="hud-top">
-
-        <!-- <div class="card">
-            <small style="color:#0004fd">SELECT MAP</small>
-
-            <select id="map-selector" onchange="changeMap(this.value)">
-                <option value="world">World</option>
-                <option value="asia">Asia</option>
-                <option value="europe">Europe</option>
-                <option value="africa">Africa</option>
-            </select>
-        </div> -->
-
         <div class="card">
             <small style="color:#0004fd">FIND THE COUNTRY</small>
             <span id="target-name">...</span>
@@ -78,6 +66,7 @@
 
     <div class="hud-vertical">
         <select id="map-selector" onchange="changeMap(this.value)">
+            <!-- <option value="contents">Continents</option> -->
             <option value="world">World</option>
             <option value="asia">Asia</option>
             <option value="europe">Europe</option>
@@ -88,13 +77,6 @@
         </select>
         <button class="btn-restart" onclick="resetGame()">Restart</button>
         <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
-        <!-- <button class="btn-label" id="label-toggle" onclick="toggleLabels()">🏷 Labels OFF</button>
-        <button class="btn-sound" id="sound-toggle" onclick="toggleSound()">🔊 Sound ON</button>
-        <button class="btn-learn" id="mode-btn" onclick="toggleMode(true)">Learn Map</button>
-        <button class="btn-home" 
-        onclick="window.location.href='../index.html'">
-            Home
-        </button> -->
     </div>
 
     <div class="hud-horizontal">
@@ -133,67 +115,33 @@
 
     <script type="module">
         import { startQuiz } from "../engine/quizEngine.js";
+        import {
+            getWorldMap,
+            getAsiaMap,
+            getEuropeMap,
+            getAfricaMap,
+            getNorthAmericaMap,
+            getSouthAmericaMap,
+            getOceaniaMap
+        } from "../maps/worldMapQuiz.js";
+
 
         const params = new URLSearchParams(window.location.search);
         const selectedMap = params.get("map") || "world";
         document.getElementById("map-selector").value = selectedMap;
 
-        let mapProvider;
+        const mapFunctions = {
+            world: getWorldMap,
+            asia: getAsiaMap,
+            europe: getEuropeMap,
+            africa: getAfricaMap,
+            northAmerica: getNorthAmericaMap,
+            southAmerica: getSouthAmericaMap,
+            oceania: getOceaniaMap
+        };
 
-        if (selectedMap === "world") {
-            const module = await import("../maps/worldMapQuiz.js");
-            mapProvider = module.getWorldMap;
-        } else {
-            const module = await import("../maps/continentMaps.js");
-
-            const mapFunctions = {
-                asia: module.getAsiaMap,
-                europe: module.getEuropeMap,
-                africa: module.getAfricaMap,
-                northAmerica: module.getNorthAmericaMap,
-                southAmerica: module.getSouthAmericaMap,
-                oceania: module.getOceaniaMap
-            };
-
-            mapProvider = mapFunctions[selectedMap];
-        }
-
-        // if (selectedMap === "world") {
-        //     const module = await import("../maps/worldMapQuiz.js");
-        //     mapProvider = module.getWorldMap;
-        // }
-
-        // if (selectedMap === "asia") {
-        //     const module = await import("../maps/asiaMapQuiz.js");
-        //     mapProvider = module.getAsiaMap;
-        // }
-
-        // if (selectedMap === "europe") {
-        //     const module = await import("../maps/europeMapQuiz.js");
-        //     mapProvider = module.getEuropeMap;
-        // }
-
-        // if (selectedMap === "africa") {
-        //     const module = await import("../maps/africaMapQuiz.js");
-        //     mapProvider = module.getAfricaMap;
-        // }
-
-        // if (selectedMap === "southAmerica") {
-        //     const module = await import("../maps/southAmericaMapQuiz.js");
-        //     mapProvider = module.getSouthAmericaMap;
-        // }
-
-        // if (selectedMap === "northAmerica") {
-        //     const module = await import("../maps/northAmericaMapQuiz.js");
-        //     mapProvider = module.getNorthAmericaMap;
-        // }
-
-        // if (selectedMap === "oceania") {
-        //     const module = await import("../maps/oceaniaMapQuiz.js");
-        //     mapProvider = module.getOceaniaMap;
-        // }
-
-
+        const mapProvider =
+        mapFunctions[selectedMap] || getWorldMap;
 
         startQuiz({
             mapDataProvider: mapProvider,
