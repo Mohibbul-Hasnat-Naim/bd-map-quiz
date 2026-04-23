@@ -192,6 +192,7 @@
             cursor: grab;
             user-select: none;
             touch-action: none;
+            /* background: #0004fd; */
         }
 
         .map-viewport:active {
@@ -207,7 +208,7 @@
         .map-region path {
             cursor: pointer;
             transition: all 0.25s ease;
-            stroke: #ffffff;
+            stroke: #ff0000;
             stroke-width: 1.5;
         }
 
@@ -224,6 +225,7 @@
         .locked path {
             /* fill: rgb(51, 240, 44) !important; */
             stroke: blueviolet !important;
+            stroke-width: 1.5;
             opacity: 0.4;
             pointer-events: none;
         }
@@ -237,9 +239,9 @@
 
         .division-label {
             display: none;
-            font-size: 30px;
+            font-size: 12px;
             font-weight: 800;
-            fill: #111;
+            fill: #000000;
             text-anchor: middle;
             dominant-baseline: middle;
             pointer-events: none;
@@ -247,7 +249,7 @@
             /* Better readability */
             paint-order: stroke;
             stroke: white;
-            stroke-width: 5px;
+            stroke-width: 3px;
             stroke-linejoin: round;
         }
 
@@ -306,7 +308,7 @@
 
     <div class="hud-top">
         <div class="card">
-            <small style="color:#0004fd">FIND CONTINENTS</small>
+            <small style="color:#0004fd">FIND THE COUNTRY</small>
             <span id="target-name">...</span>
             <div id="status-msg">Correct!</div>
         </div>
@@ -343,7 +345,7 @@
 
     <div class="map-viewport" id="map-viewport">
         <svg
-            viewBox="-2 18 965 925"
+            viewBox="0 0 2000 857"
             xmlns="http://www.w3.org/2000/svg"
             id="main-svg"
         >
@@ -356,10 +358,10 @@
 
     <script type="module">
         import { startQuiz } from "../engine/quizEngine.js";
-        import { getContinentsMap } from "../maps/continents.js";
+        import { getWorldMap } from "../maps/world_map.js";
 
         startQuiz({
-            mapDataProvider: getContinentsMap,
+            mapDataProvider: getWorldMap,
             sounds: {
                 correct: new Audio("../sounds/correct.mp3"),
                 wrong: new Audio("../sounds/wrong.mp3"),
@@ -369,5 +371,4 @@
             }
         });
     </script>
-    
 </html>
