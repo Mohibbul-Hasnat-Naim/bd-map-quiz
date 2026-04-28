@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>International HQ Quiz</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- Back Button -->
+    <div class="top-left">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </div>
+
+
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+        <div class="question-count">
+            Question: <span id="current-question">0</span>/<span id="total-questions">0</span>
+        </div>
+
+        <div class="score">
+            Score: <span id="score">0</span>
+        </div>
+
+        <div class="timer">
+            Time: <span id="timer">00:00</span>
+        </div>
+    </div>
+
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+
+    <!-- Click Anywhere to Start Overlay -->
+    <div class="start-overlay" id="start-overlay">
+        <h1>International Organizations HQ Quiz</h1>
+        <p>Click Anywhere to Start</p>
+    </div>
+
+
+    <!-- Main Quiz Container -->
+    <div class="quiz-container">
+
+        <!-- Question Box -->
+        <div class="question-box">
+            <h2 id="question-text">
+                Question will appear here
+            </h2>
+        </div>
+
+
+        <!-- Options Container -->
+        <div class="options-container" id="options-container">
+
+            <button class="option-btn">Option 1</button>
+            <button class="option-btn">Option 2</button>
+            <button class="option-btn">Option 3</button>
+            <button class="option-btn">Option 4</button>
+
+        </div>
+
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <button id="next-btn">Next Question →</button>
+        </div>
+
+    </div>
+
+
+    <!-- Final Victory Card -->
+    <div class="result-card" id="result-card">
+
+        <h2>Quiz Completed!</h2>
+
+        <p>
+            Final Score:
+            <span id="final-score">0</span>
+        </p>
+
+        <p>
+            Accuracy:
+            <span id="accuracy">0%</span>
+        </p>
+
+        <p>
+            Total Time:
+            <span id="final-time">00:00</span>
+        </p>
+
+        <button onclick="location.reload()">
+            Restart Quiz
+        </button>
+
+        <a href="index.html">
+            <button>Back to Home</button>
+        </a>
+
+    </div>
+
+</body>
+
+<!-- JS Files -->
+<script src="../config/int_hq_quiz_data.js"></script>
+<script src="../engine/int_hq_quiz_engine.js"></script>
+
+</html>
