@@ -86,6 +86,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.88);
+    opacity: .4;
     color: white;
     display: flex;
     flex-direction: column;
