@@ -12,6 +12,8 @@ let timerInterval = null;
 let currentCorrectAnswer = "";
 let quizStarted = false;
 
+let wrongAnswers = [];
+
 
 /* =========================
    DOM ELEMENTS
@@ -142,14 +144,31 @@ function generateQuestion() {
     // Generate options
     let options = [currentCorrectAnswer];
 
-    while (options.length < 4) {
-        let randomOrg =
-            organizations[Math.floor(Math.random() * organizations.length)];
+    // while (options.length < 4) {
+    //     let randomOrg =
+    //         organizations[Math.floor(Math.random() * organizations.length)];
 
-        let wrongAnswer = randomOrg.headquarters;
+    //     let wrongAnswer = randomOrg.headquarters;
 
-        if (!options.includes(wrongAnswer)) {
-            options.push(wrongAnswer);
+    //     if (!options.includes(wrongAnswer)) {
+    //         options.push(wrongAnswer);
+    //     }
+    // }
+
+    if (options.length < 4) {
+        const fallbackPool = [
+            "New York",
+            "Geneva",
+            "Paris",
+            "Rome",
+            "Washington, D.C."
+        ];
+
+        while (options.length < 4) {
+            let fallback = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+            if (!options.includes(fallback)) {
+                options.push(fallback);
+            }
         }
     }
 
@@ -219,6 +238,7 @@ function checkAnswer(selectedButton, selectedAnswer) {
     if (selectedAnswer === currentCorrectAnswer) {
         selectedButton.style.backgroundColor = "#4CAF50"; // green
         selectedButton.style.color = "white";
+        playSound("correct");
         score++;
         scoreEl.textContent = score;
     } 
@@ -226,6 +246,7 @@ function checkAnswer(selectedButton, selectedAnswer) {
         // Wrong answer
         selectedButton.style.backgroundColor = "#f44336"; // red
         selectedButton.style.color = "white";
+        playSound("wrong");
 
         // Highlight correct answer
         allButtons.forEach(btn => {
@@ -236,6 +257,14 @@ function checkAnswer(selectedButton, selectedAnswer) {
         });
     }
 
+    if (selectedAnswer !== currentCorrectAnswer) {
+        wrongAnswers.push({
+            question: selectedQuestions[currentQuestionIndex].name,
+            correct: currentCorrectAnswer,
+            selected: selectedAnswer
+        });
+    }
+
     // Update UI score display
     scoreEl.textContent = score;
      // Enable next button after answering
@@ -243,16 +272,8 @@ function checkAnswer(selectedButton, selectedAnswer) {
 }
 
 function nextQuestion() {
-
     // Move to next question
     currentQuestionIndex++;
-
-    // If quiz finished
-    if (currentQuestionIndex >= totalQuestions) {
-        showFinalResult();
-        return;
-    }
-
     // Load next question
     generateQuestion();
 }
@@ -280,4 +301,55 @@ function showFinalResult() {
 
     // Optional: progress bar full
     progressBar.style.width = "100%";
+
+    showReview();
+}
+
+function goHome() {
+    stopTimer();
+    window.location.href = "../index.html";
+}
+
+function playSound(type) {
+    const audio = new Audio();
+
+    if (type === "correct") {
+        audio.src = "https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg";
+    } 
+    else {
+        audio.src = "https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg";
+    }
+
+    audio.play();
+}
+
+/* =========================
+   SHOW REVIEW SCREEN
+========================= */
+
+function showReview() {
+
+    let reviewHTML = "<h2>Review Wrong Answers</h2>";
+
+    if (wrongAnswers.length === 0) {
+        reviewHTML += "<p>Perfect! No mistakes 🎉</p>";
+    } else {
+
+        wrongAnswers.forEach(item => {
+            reviewHTML += `
+                <div style="margin:15px; padding:15px; background:#f5f5f5; border-radius:10px;">
+                    <p><b>Question:</b> ${item.question}</p>
+                    <p style="color:red;"><b>Your Answer:</b> ${item.selected}</p>
+                    <p style="color:green;"><b>Correct:</b> ${item.correct}</p>
+                </div>
+            `;
+        });
+    }
+
+    // resultCard.innerHTML += reviewHTML;
+    const oldReview = document.getElementById("review-section");
+
+    if (oldReview) oldReview.remove();
+
+    resultCard.innerHTML += `<div id="review-section">${reviewHTML}</div>`;
 }
