@@ -14,6 +14,7 @@ body {
     color: #222;
     min-height: 100vh;
     padding: 15px;
+    overflow: hidden;
 }
 
 
@@ -46,13 +47,14 @@ body {
     position: fixed;
     top: 15px;
     right: 15px;
-    background: white;
+    background: rgb(248, 247, 184);
     padding: 10px 14px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     text-align: right;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.4;
     z-index: 100;
 }
 
@@ -73,8 +75,9 @@ body {
 .progress-bar {
     width: 0%;
     height: 100%;
-    background: #4caf50;
-    transition: 0.3s;
+    /* background: linear-gradient(90deg, #22c55e, #3b82f6); */
+    background: linear-gradient(90deg, #ff6464, #4bff5a);
+    transition: 0.4s;
 }
 
 
@@ -111,6 +114,28 @@ body {
     /* opacity: 1; */
 }
 
+.start-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.start-options button {
+    padding: 14px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    background: rgb(55, 253, 88);
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.start-options button:hover {
+    background: #ddd;
+}
+
 
 /* =========================
    QUIZ CONTAINER
@@ -130,7 +155,7 @@ body {
 ========================= */
 
 .question-box {
-    background: white;
+    background: rgb(255, 173, 251);
     padding: 25px 20px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -140,6 +165,7 @@ body {
 .question-box h2 {
     font-size: 22px;
     line-height: 1.5;
+    /* color: aliceblue; */
 }
 
 
@@ -156,9 +182,11 @@ body {
 .option-btn {
     padding: 16px;
     font-size: 16px;
+    /* font-weight: bold; */
+    font-style: italic;
     border: none;
     border-radius: 12px;
-    background: white;
+    background: rgb(145, 255, 255);
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     transition: 0.2s;
@@ -167,6 +195,8 @@ body {
 
 .option-btn:hover {
     transform: translateY(-2px);
+    /* color: #4caf50; */
+    background: #4caf50;
 }
 
 
@@ -198,31 +228,106 @@ body {
     display: none;
     position: fixed;
     inset: 0;
-    background: white;
+
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     z-index: 1000;
-    padding: 80px 20px 20px;
+
+    padding: 30px 20px;
+
+    /* display: flex; */
+    flex-direction: column;
+    align-items: center;
+
     text-align: center;
-    overflow-y: auto;
+    color: white;
+
+    overflow-y: auto;   /* ✅ KEY FIX */
+    -webkit-overflow-scrolling: touch;
 }
 
 .result-card h2 {
-    font-size: 30px;
-    margin-bottom: 25px;
+    font-size: 34px;
+    margin-bottom: 20px;
+    color: #4ade80;
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
 }
 
 .result-card p {
     font-size: 18px;
-    margin: 12px 0;
+    margin: 10px 0;
+
+    background: rgba(255,255,255,0.08);
+    padding: 12px 18px;
+    border-radius: 12px;
+
+    width: 220px;
+    display: flex;
+    justify-content: space-between;
+
+    backdrop-filter: blur(6px);
+}
+
+#final-score, #accuracy, #final-time {
+    font-weight: bold;
+    color: #facc15;
 }
 
 .result-card button {
-    width: 100%;
-    margin: 12px 0;
-    padding: 15px;
+    width: 220px;
+    margin: 10px 0;
+
+    padding: 14px;
     border: none;
     border-radius: 12px;
-    cursor: pointer;
+
     font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.result-card button:last-of-type {
+    background: #334155;
+    color: white;
+}
+
+.result-card button:hover{
+    background-color: #60a5fa;
+}
+
+/* =========================
+   REVIEW SECTION
+========================= */
+
+#review-section {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 25px;
+}
+
+.review-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 12px 0;
+
+    backdrop-filter: blur(6px);
+    border-left: 4px solid #60a5fa;
+
+    color: white;
+    text-align: left;
+}
+
+.review-card .wrong {
+    color: #f87171;
+    margin-top: 6px;
+}
+
+.review-card .correct {
+    color: #4ade80;
+    margin-top: 4px;
 }
 
 

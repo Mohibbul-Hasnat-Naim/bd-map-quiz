@@ -4,6 +4,7 @@
 
 let currentQuestionIndex = 0;
 let score = 0;
+// let totalQuestions = organizations.length;
 let totalQuestions = 0;
 let selectedQuestions = [];
 
@@ -53,36 +54,43 @@ function initializeQuiz() {
 
 
 /* =========================
+   START QUIZ EVENT
+========================= */
+
+// startOverlay.addEventListener("click", function () {
+//     if (!quizStarted) {
+//         quizStarted = true;
+//         startOverlay.style.display = "none";
+
+//         startQuiz();
+//     }
+// });
+
+/* =========================
    START QUIZ WITH MODE
 ========================= */
 
-function startQuizWithMode(count) {
+function startQuizWithMode(percent) {
 
     quizStarted = true;
     startOverlay.style.display = "none";
 
-    // Reset state
-    currentQuestionIndex = 0;
-    score = 0;
-    wrongAnswers = [];
-    timerSeconds = 0;
+    // Shuffle full dataset
+    let shuffled = shuffleArray([...organizations]);
 
-    // Shuffle dataset
-    selectedQuestions = shuffleArray([...organizations]);
+    // Calculate number of questions
+    let count = Math.round(shuffled.length * percent);
 
-    // Ensure valid count
-    count = Math.min(count, selectedQuestions.length);
+    // Safety bounds
+    if (count < 1) count = 1;
+    if (count > shuffled.length) count = shuffled.length;
 
-    // Slice properly
-    selectedQuestions = selectedQuestions.slice(0, count);
+    // Slice questions
+    selectedQuestions = shuffled.slice(0, count);
 
-    // IMPORTANT: now THIS is truth
+    // Update total
     totalQuestions = selectedQuestions.length;
-
-    // UI update
     totalQuestionsEl.textContent = totalQuestions;
-    scoreEl.textContent = 0;
-    currentQuestionEl.textContent = 0;
 
     startTimer();
     generateQuestion();
@@ -100,7 +108,7 @@ nextBtn.addEventListener("click", function () {
 /* =========================
    PAGE LOAD
 ========================= */
-buildStartOptions();
+
 initializeQuiz();
 
 
@@ -149,11 +157,7 @@ function updateTimerDisplay() {
 }
 
 function generateQuestion() {
-       if (!selectedQuestions || selectedQuestions.length === 0) {
-        return;
-    }
-
-    if (currentQuestionIndex >= selectedQuestions.length) {
+    if (currentQuestionIndex >= totalQuestions) {
         showFinalResult();
         return;
     }
@@ -170,6 +174,17 @@ function generateQuestion() {
 
     // Generate options
     let options = [currentCorrectAnswer];
+
+    // while (options.length < 4) {
+    //     let randomOrg =
+    //         organizations[Math.floor(Math.random() * organizations.length)];
+
+    //     let wrongAnswer = randomOrg.headquarters;
+
+    //     if (!options.includes(wrongAnswer)) {
+    //         options.push(wrongAnswer);
+    //     }
+    // }
 
     if (options.length < 4) {
         const fallbackPool = [
@@ -303,7 +318,7 @@ function showFinalResult() {
     document.querySelector(".quiz-container").style.display = "none";
 
     // Show result card
-    resultCard.style.display = "flex";
+    resultCard.style.display = "block";
 
     // Calculate accuracy
     let accuracy = Math.round((score / totalQuestions) * 100);
@@ -340,68 +355,35 @@ function playSound(type) {
 }
 
 /* =========================
-   BUILD START OPTIONS DYNAMICALLY
-========================= */
-
-function buildStartOptions() {
-
-    const container = document.getElementById("start-options");
-
-    container.innerHTML = "";
-
-    const total = organizations.length;
-
-    const options = [
-        Math.max(1, Math.round(total * 0.3)),
-        Math.max(1, Math.round(total * 0.6)),
-        total
-    ];
-
-    const labels = [
-        "Easy",
-        "Medium",
-        "Full"
-    ];
-
-    options.forEach((count, index) => {
-
-        const btn = document.createElement("button");
-
-        btn.textContent = `${count} Questions (${labels[index]})`;
-
-        btn.onclick = () => startQuizWithMode(count);
-
-        container.appendChild(btn);
-    });
-}
-
-/* =========================
    SHOW REVIEW SCREEN
 ========================= */
 
 function showReview() {
 
-    let reviewHTML = `<h2 style="margin-top:20px;">Review Wrong Answers</h2>`;
+    let reviewHTML = "<h2>Review Wrong Answers</h2>";
 
     if (wrongAnswers.length === 0) {
-        reviewHTML += `<p style="margin-top:10px;">Perfect! No mistakes 🎉</p>`;
+        reviewHTML += "<p>Perfect! No mistakes 🎉</p>";
     } else {
 
         wrongAnswers.forEach(item => {
             reviewHTML += `
-                <div class="review-card">
+                <div style="margin:15px; padding:15px; background:#f5f5f5; border-radius:10px;">
                     <p><b>Question:</b> ${item.question}</p>
-                    <p class="wrong">Your Answer: ${item.selected}</p>
-                    <p class="correct">Correct: ${item.correct}</p>
+                    <p style="color:red;"><b>Your Answer:</b> ${item.selected}</p>
+                    <p style="color:green;"><b>Correct:</b> ${item.correct}</p>
                 </div>
             `;
         });
     }
 
+    // resultCard.innerHTML += reviewHTML;
     const oldReview = document.getElementById("review-section");
+
     if (oldReview) oldReview.remove();
 
     resultCard.innerHTML += `<div id="review-section">${reviewHTML}</div>`;
 }
+
 
 window.startQuizWithMode = startQuizWithMode;

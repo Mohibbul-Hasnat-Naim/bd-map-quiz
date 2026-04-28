@@ -24,26 +24,26 @@ const organizations = [
         name: "FAO",
         headquarters: "Rome"
     },
-    // {
-    //     id: 6,
-    //     name: "IMF",
-    //     headquarters: "Washington, D.C."
-    // },
-    // {
-    //     id: 7,
-    //     name: "World Bank",
-    //     headquarters: "Washington, D.C."
-    // },
-    // {
-    //     id: 8,
-    //     name: "UNICEF",
-    //     headquarters: "New York"
-    // },
-    // {
-    //     id: 9,
-    //     name: "UNDP",
-    //     headquarters: "New York"
-    // },
+    {
+        id: 6,
+        name: "IMF",
+        headquarters: "Washington, D.C."
+    },
+    {
+        id: 7,
+        name: "World Bank",
+        headquarters: "Washington, D.C."
+    },
+    {
+        id: 8,
+        name: "UNICEF",
+        headquarters: "New York"
+    },
+    {
+        id: 9,
+        name: "UNDP",
+        headquarters: "New York"
+    },
     {
         id: 10,
         name: "WTO",
