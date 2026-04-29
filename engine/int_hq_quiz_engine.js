@@ -390,7 +390,7 @@ function showReview() {
         wrongAnswers.forEach(item => {
             reviewHTML += `
                 <div class="review-card">
-                    <p><b>Question:</b> ${item.question}</p>
+                    <p class="Question">Question: ${item.question}</p>
                     <p class="wrong">Your Answer: ${item.selected}</p>
                     <p class="correct">Correct: ${item.correct}</p>
                 </div>
