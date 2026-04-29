@@ -103,20 +103,6 @@ nextBtn.addEventListener("click", function () {
 buildStartOptions();
 initializeQuiz();
 
-
-/* =========================
-   START QUIZ
-========================= */
-
-function startQuiz() {
-    // Shuffle entire question list ONCE
-    selectedQuestions = shuffleArray([...organizations]);
-
-    startTimer();
-    generateQuestion();
-}
-
-
 /* =========================
    TIMER ENGINE
 ========================= */
@@ -161,30 +147,52 @@ function generateQuestion() {
     // Current question object
     const currentOrg = selectedQuestions[currentQuestionIndex];
 
-    // Set question text
-    questionText.textContent =
-        "Where is the headquarters of " + currentOrg.name + "?";
+    // // Set question text
+    // questionText.textContent =
+    //     // "Where is the headquarters of " + currentOrg.name + "?";
+    //     currentOrg.name;
 
+    questionText.innerHTML = `
+        <div class="org-name-en">
+            ${currentOrg.name}
+        </div>
+
+        <div class="org-name-bn">
+            ${currentOrg.name_bn || ""}
+        </div>
+    `;
+    
     // Correct answer
     currentCorrectAnswer = currentOrg.headquarters;
 
     // Generate options
     let options = [currentCorrectAnswer];
 
-    if (options.length < 4) {
-        const fallbackPool = [
-            "New York",
-            "Geneva",
-            "Paris",
-            "Rome",
-            "Washington, D.C."
-        ];
+    // if (options.length < 4) {
+    //     const fallbackPool = [
+    //         "New York",
+    //         "Geneva",
+    //         "Paris",
+    //         "Rome",
+    //         "Washington, D.C."
+    //     ];
 
-        while (options.length < 4) {
-            let fallback = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
-            if (!options.includes(fallback)) {
-                options.push(fallback);
-            }
+    //     while (options.length < 4) {
+    //         let fallback = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+    //         if (!options.includes(fallback)) {
+    //             options.push(fallback);
+    //         }
+    //     }
+    // }
+
+    while (options.length < 4) {
+        let randomOrg =
+            organizations[Math.floor(Math.random() * organizations.length)];
+
+        let wrongAnswer = randomOrg.headquarters;
+
+        if (!options.includes(wrongAnswer)) {
+            options.push(wrongAnswer);
         }
     }
 
@@ -346,20 +354,21 @@ function playSound(type) {
 function buildStartOptions() {
 
     const container = document.getElementById("start-options");
-
     container.innerHTML = "";
 
     const total = organizations.length;
 
     const options = [
-        Math.max(1, Math.round(total * 0.3)),
-        Math.max(1, Math.round(total * 0.6)),
+        Math.max(1, Math.round(total * 0.25)),
+        Math.max(1, Math.round(total * 0.50)),
+        Math.max(1, Math.round(total * 0.75)),
         total
     ];
 
     const labels = [
         "Easy",
         "Medium",
+        "Hard",
         "Full"
     ];
 
