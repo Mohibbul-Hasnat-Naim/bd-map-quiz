@@ -10,7 +10,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f4f7fa;
+    background: #eefaf9;
     color: #222;
     min-height: 100vh;
     padding: 15px;
@@ -47,7 +47,7 @@ body {
     position: fixed;
     top: 15px;
     right: 15px;
-    background: rgb(248, 247, 184);
+    background: rgb(38, 223, 236);
     padding: 10px 14px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -88,7 +88,7 @@ body {
 .start-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(255, 255, 255, 0.315);
+    background: rgb(0, 0, 0);
     /* opacity: 1; */
     color: rgb(255, 255, 255);
     display: flex;
@@ -105,12 +105,12 @@ body {
 .start-overlay h1 {
     font-size: 28px;
     line-height: 1.4;
-    background-color: rgb(0, 0, 0);
+    /* background-color: rgb(0, 0, 0); */
 }
 
 .start-overlay p {
     font-size: 20px;
-    background-color: black;
+    /* background-color: black; */
     /* opacity: 1; */
 }
 
