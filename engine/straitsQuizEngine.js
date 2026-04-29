@@ -134,7 +134,7 @@ function updateTimerDisplay() {
         formattedMinutes + ":" + formattedSeconds;
 }
 
-// function generateQuestion() {
+// function generateQuestion v1() {
 //     if (!selectedQuestions || selectedQuestions.length === 0) {
 //         return;
 //     }
@@ -147,112 +147,110 @@ function updateTimerDisplay() {
 //     const currentStrait = selectedQuestions[currentQuestionIndex];
 
 //     const questionTypes = [
-//         "connects_to_strait",
-//         "separates_to_strait",
-//         "strait_to_connects",
-//         "strait_to_separates"
+//         "strait_to_details",
+//         "details_to_strait"
 //     ];
 
 //     const type =
 //         questionTypes[Math.floor(Math.random() * questionTypes.length)];
 
-//     let questionLabel = "";
 //     let correctAnswer = "";
 //     let options = [];
 
-//     if (type === "connects_to_strait") {
-//         const item =
-//             currentStrait.connects[
-//                 Math.floor(Math.random() * currentStrait.connects.length)
-//             ];
+//     const connectItem =
+//         currentStrait.connects[
+//             Math.floor(Math.random() * currentStrait.connects.length)
+//         ];
 
-//         questionLabel = `Which strait connects:`;
-//         correctAnswer = currentStrait.name;
+//     const separateItem =
+//         currentStrait.separates[
+//             Math.floor(Math.random() * currentStrait.separates.length)
+//         ];
 
+//     /* =========================
+//        TYPE 1: STRAIT → DETAILS
+//     ========================= */
+//     if (type === "strait_to_details") {
+
+//         // QUESTION = STRAIT NAME
 //         questionText.innerHTML = `
-//             <div class="org-name-en">${item}</div>
+//             <div class="org-name-en">
+//                 ${currentStrait.name}
+//             </div>
+
+//             <div class="org-name-bn">
+//                 ${currentStrait.name_bn || ""}
+//             </div>
 //         `;
-//     }
 
-//     if (type === "separates_to_strait") {
-//         const item =
-//             currentStrait.separates[
-//                 Math.floor(Math.random() * currentStrait.separates.length)
-//             ];
+//         // ANSWER = DETAILS
+//         correctAnswer = `Connects: ${connectItem}\nSeparates: ${separateItem}`;
+//         options = [correctAnswer];
 
-//         questionLabel = `Which strait separates:`;
-//         correctAnswer = currentStrait.name;
+//         while (options.length < 4) {
 
-//         questionText.innerHTML = `
-//             <div class="org-name-en">${item}</div>
-//         `;
-//     }
+//             let randomStrait =
+//                 straitsData[Math.floor(Math.random() * straitsData.length)];
 
-//     if (type === "strait_to_connects") {
-//         const item =
-//             currentStrait.connects[
-//                 Math.floor(Math.random() * currentStrait.connects.length)
-//             ];
-
-//         questionLabel = `${currentStrait.name} connects—`;
-//         correctAnswer = item;
-
-//         questionText.innerHTML = `
-//             <div class="org-name-en">${questionLabel}</div>
-//             <div class="org-name-bn">${currentStrait.name_bn || ""}</div>
-//         `;
-//     }
-
-//     if (type === "strait_to_separates") {
-//         const item =
-//             currentStrait.separates[
-//                 Math.floor(Math.random() * currentStrait.separates.length)
-//             ];
-
-//         questionLabel = `${currentStrait.name} separates—`;
-//         correctAnswer = item;
-
-//         questionText.innerHTML = `
-//             <div class="org-name-en">${questionLabel}</div>
-//             <div class="org-name-bn">${currentStrait.name_bn || ""}</div>
-//         `;
-//     }
-
-//     currentCorrectAnswer = correctAnswer;
-//     options = [correctAnswer];
-
-//     while (options.length < 4) {
-//         let randomStrait =
-//             straitsData[Math.floor(Math.random() * straitsData.length)];
-
-//         let wrongAnswer = "";
-
-//         if (
-//             type === "connects_to_strait" ||
-//             type === "separates_to_strait"
-//         ) {
-//             wrongAnswer = randomStrait.name;
-//         }
-
-//         if (type === "strait_to_connects") {
-//             wrongAnswer =
+//             let wrongConnect =
 //                 randomStrait.connects[
 //                     Math.floor(Math.random() * randomStrait.connects.length)
 //                 ];
-//         }
 
-//         if (type === "strait_to_separates") {
-//             wrongAnswer =
+//             let wrongSeparate =
 //                 randomStrait.separates[
 //                     Math.floor(Math.random() * randomStrait.separates.length)
 //                 ];
-//         }
 
-//         if (!options.includes(wrongAnswer)) {
-//             options.push(wrongAnswer);
+//             let wrongAnswer =
+//                 `Connects: ${wrongConnect}\nSeparates: ${wrongSeparate}`;
+
+//             if (!options.includes(wrongAnswer)) {
+//                 options.push(wrongAnswer);
+//             }
 //         }
 //     }
 
+//     /* =========================
+//        TYPE 2: DETAILS → STRAIT
+//     ========================= */
+//     if (type === "details_to_strait") {
+
+//         // QUESTION = DETAILS
+//         questionText.innerHTML = `
+//             <div class="strait-detail">
+//                 <span class="connect-label">Connects:</span>
+//                 <span class="connect-value">${connectItem}</span>
+//             </div>
+
+//             <div class="strait-detail">
+//                 <span class="separate-label">Separates:</span>
+//                 <span class="separate-value">${separateItem}</span>
+//             </div>
+//         `;
+
+//         // ANSWER = STRAIT NAME
+//         correctAnswer = currentStrait.name;
+//         options = [correctAnswer];
+
+//         while (options.length < 4) {
+
+//             let randomStrait =
+//                 straitsData[Math.floor(Math.random() * straitsData.length)];
+
+//             let wrongAnswer = randomStrait.name;
+
+//             if (!options.includes(wrongAnswer)) {
+//                 options.push(wrongAnswer);
+//             }
+//         }
+//     }
+
+//     /* =========================
+//        FINALIZE STATE
+//     ========================= */
+
+//     currentCorrectAnswer = correctAnswer;
 //     options = shuffleArray(options);
 
 //     optionsContainer.innerHTML = "";
@@ -261,7 +259,19 @@ function updateTimerDisplay() {
 //         const button = document.createElement("button");
 
 //         button.classList.add("option-btn");
-//         button.textContent = option;
+
+//         // 🔥 CRITICAL FIX: use dataset for logic safety
+//         button.dataset.answer = option;
+
+//         // TYPE-AWARE RENDERING
+//         if (type === "strait_to_details") {
+//             button.innerHTML = option
+//                 .replace("Connects:", '<span class="connect-label">Connects:</span>')
+//                 .replace("Separates:", '<span class="separate-label">Separates:</span>')
+//                 .replace(/\n/g, "<br>");
+//         } else {
+//             button.textContent = option;
+//         }
 
 //         button.addEventListener("click", function () {
 //             checkAnswer(button, option);
@@ -270,9 +280,12 @@ function updateTimerDisplay() {
 //         optionsContainer.appendChild(button);
 //     });
 
+//     /* =========================
+//        UI UPDATE
+//     ========================= */
+
 //     currentQuestionEl.textContent = currentQuestionIndex + 1;
 //     updateProgressBar();
-
 //     nextBtn.disabled = true;
 // }
 
@@ -298,8 +311,11 @@ function generateQuestion() {
     let options = [];
 
     // FULL structured values (IMPORTANT FIX)
-    const connectItem = currentStrait.connects.join("; ");
-    const separateItem = currentStrait.separates.join("; ");
+    // const connectItem = currentStrait.connects.join("; ");
+    // const separateItem = currentStrait.separates.join("; ");
+    
+    const connectItem = currentStrait.connects?.[0] || "N/A";
+    const separateItem = currentStrait.separates?.[0] || "N/A";
 
     /* =========================
        TYPE 1: STRAIT → DETAILS
@@ -330,7 +346,7 @@ function generateQuestion() {
                 straitsData[Math.floor(Math.random() * straitsData.length)];
 
             let wrongAnswer =
-                `Connects: ${randomStrait.connects.join("; ")}\nSeparates: ${randomStrait.separates.join("; ")}`;
+                `Connects: ${randomStrait.connects[0] || "N/A"}\nSeparates: ${randomStrait.separates[0] || "N/A"}`;
 
             if (!options.includes(wrongAnswer)) {
                 options.push(wrongAnswer);
