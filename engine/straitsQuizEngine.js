@@ -591,7 +591,7 @@ function showReview() {
     let reviewHTML = `<h2 style="margin-top:20px;">Review Wrong Answers</h2>`;
 
     if (wrongAnswers.length === 0) {
-        reviewHTML += `<p style="margin-top:10px;">Perfect! No mistakes 🎉</p>`;
+        reviewHTML += `<div class="perfect-message">Perfect! No mistakes 🎉</div>`;
     } else {
 
         wrongAnswers.forEach(item => {
