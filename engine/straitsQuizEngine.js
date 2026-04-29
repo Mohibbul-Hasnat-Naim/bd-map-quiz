@@ -314,7 +314,7 @@ function generateQuestion() {
     ========================= */
     if (type === "strait_to_details") {
 
-        // QUESTION: Strait name
+        // QUESTION = STRAIT NAME
         questionText.innerHTML = `
             <div class="org-name-en">
                 ${currentStrait.name}
@@ -325,12 +325,12 @@ function generateQuestion() {
             </div>
         `;
 
-        // ANSWER FORMAT: details combo
+        // ANSWER = DETAILS
         correctAnswer = `Connects: ${connectItem}\nSeparates: ${separateItem}`;
         options = [correctAnswer];
 
-        // WRONG OPTIONS
         while (options.length < 4) {
+
             let randomStrait =
                 straitsData[Math.floor(Math.random() * straitsData.length)];
 
@@ -358,7 +358,7 @@ function generateQuestion() {
     ========================= */
     if (type === "details_to_strait") {
 
-        // QUESTION: structured details
+        // QUESTION = DETAILS
         questionText.innerHTML = `
             <div class="strait-detail">
                 <span class="connect-label">Connects:</span>
@@ -371,12 +371,12 @@ function generateQuestion() {
             </div>
         `;
 
-        // ANSWER: strait name
+        // ANSWER = STRAIT NAME
         correctAnswer = currentStrait.name;
         options = [correctAnswer];
 
-        // WRONG OPTIONS
         while (options.length < 4) {
+
             let randomStrait =
                 straitsData[Math.floor(Math.random() * straitsData.length)];
 
@@ -389,7 +389,7 @@ function generateQuestion() {
     }
 
     /* =========================
-       FINAL PROCESSING
+       FINALIZE STATE
     ========================= */
 
     currentCorrectAnswer = correctAnswer;
@@ -402,7 +402,10 @@ function generateQuestion() {
 
         button.classList.add("option-btn");
 
-        // TYPE-AWARE RENDERING (IMPORTANT FIX)
+        // 🔥 CRITICAL FIX: use dataset for logic safety
+        button.dataset.answer = option;
+
+        // TYPE-AWARE RENDERING
         if (type === "strait_to_details") {
             button.innerHTML = option
                 .replace("Connects:", '<span class="connect-label">Connects:</span>')
@@ -422,6 +425,7 @@ function generateQuestion() {
     /* =========================
        UI UPDATE
     ========================= */
+
     currentQuestionEl.textContent = currentQuestionIndex + 1;
     updateProgressBar();
     nextBtn.disabled = true;
@@ -446,31 +450,29 @@ function updateProgressBar() {
 
 function checkAnswer(selectedButton, selectedAnswer) {
 
-    // Prevent multiple clicks
     const allButtons = document.querySelectorAll(".option-btn");
 
     allButtons.forEach(btn => {
         btn.disabled = true;
     });
 
-    // Correct answer handling
+    // Correct answer check
     if (selectedAnswer === currentCorrectAnswer) {
-        selectedButton.style.backgroundColor = "#4CAF50"; // green
+        selectedButton.style.backgroundColor = "#6aff6f";
         selectedButton.style.color = "white";
         playSound("correct");
         score++;
         scoreEl.textContent = score;
     } 
     else {
-        // Wrong answer
-        selectedButton.style.backgroundColor = "#f44336"; // red
+        selectedButton.style.backgroundColor = "#ff786e";
         selectedButton.style.color = "white";
         playSound("wrong");
 
-        // Highlight correct answer
+        // highlight correct
         allButtons.forEach(btn => {
-            if (btn.textContent === currentCorrectAnswer) {
-                btn.style.backgroundColor = "#4CAF50"; // green
+            if (btn.dataset.answer === currentCorrectAnswer) {
+                btn.style.backgroundColor = "#6aff6f";
                 btn.style.color = "white";
             }
         });
@@ -484,9 +486,7 @@ function checkAnswer(selectedButton, selectedAnswer) {
         });
     }
 
-    // Update UI score display
     scoreEl.textContent = score;
-     // Enable next button after answering
     nextBtn.disabled = false;
 }
 
