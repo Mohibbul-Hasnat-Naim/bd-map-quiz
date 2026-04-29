@@ -134,6 +134,148 @@ function updateTimerDisplay() {
         formattedMinutes + ":" + formattedSeconds;
 }
 
+// function generateQuestion() {
+//     if (!selectedQuestions || selectedQuestions.length === 0) {
+//         return;
+//     }
+
+//     if (currentQuestionIndex >= selectedQuestions.length) {
+//         showFinalResult();
+//         return;
+//     }
+
+//     const currentStrait = selectedQuestions[currentQuestionIndex];
+
+//     const questionTypes = [
+//         "connects_to_strait",
+//         "separates_to_strait",
+//         "strait_to_connects",
+//         "strait_to_separates"
+//     ];
+
+//     const type =
+//         questionTypes[Math.floor(Math.random() * questionTypes.length)];
+
+//     let questionLabel = "";
+//     let correctAnswer = "";
+//     let options = [];
+
+//     if (type === "connects_to_strait") {
+//         const item =
+//             currentStrait.connects[
+//                 Math.floor(Math.random() * currentStrait.connects.length)
+//             ];
+
+//         questionLabel = `Which strait connects:`;
+//         correctAnswer = currentStrait.name;
+
+//         questionText.innerHTML = `
+//             <div class="org-name-en">${item}</div>
+//         `;
+//     }
+
+//     if (type === "separates_to_strait") {
+//         const item =
+//             currentStrait.separates[
+//                 Math.floor(Math.random() * currentStrait.separates.length)
+//             ];
+
+//         questionLabel = `Which strait separates:`;
+//         correctAnswer = currentStrait.name;
+
+//         questionText.innerHTML = `
+//             <div class="org-name-en">${item}</div>
+//         `;
+//     }
+
+//     if (type === "strait_to_connects") {
+//         const item =
+//             currentStrait.connects[
+//                 Math.floor(Math.random() * currentStrait.connects.length)
+//             ];
+
+//         questionLabel = `${currentStrait.name} connects—`;
+//         correctAnswer = item;
+
+//         questionText.innerHTML = `
+//             <div class="org-name-en">${questionLabel}</div>
+//             <div class="org-name-bn">${currentStrait.name_bn || ""}</div>
+//         `;
+//     }
+
+//     if (type === "strait_to_separates") {
+//         const item =
+//             currentStrait.separates[
+//                 Math.floor(Math.random() * currentStrait.separates.length)
+//             ];
+
+//         questionLabel = `${currentStrait.name} separates—`;
+//         correctAnswer = item;
+
+//         questionText.innerHTML = `
+//             <div class="org-name-en">${questionLabel}</div>
+//             <div class="org-name-bn">${currentStrait.name_bn || ""}</div>
+//         `;
+//     }
+
+//     currentCorrectAnswer = correctAnswer;
+//     options = [correctAnswer];
+
+//     while (options.length < 4) {
+//         let randomStrait =
+//             straitsData[Math.floor(Math.random() * straitsData.length)];
+
+//         let wrongAnswer = "";
+
+//         if (
+//             type === "connects_to_strait" ||
+//             type === "separates_to_strait"
+//         ) {
+//             wrongAnswer = randomStrait.name;
+//         }
+
+//         if (type === "strait_to_connects") {
+//             wrongAnswer =
+//                 randomStrait.connects[
+//                     Math.floor(Math.random() * randomStrait.connects.length)
+//                 ];
+//         }
+
+//         if (type === "strait_to_separates") {
+//             wrongAnswer =
+//                 randomStrait.separates[
+//                     Math.floor(Math.random() * randomStrait.separates.length)
+//                 ];
+//         }
+
+//         if (!options.includes(wrongAnswer)) {
+//             options.push(wrongAnswer);
+//         }
+//     }
+
+//     options = shuffleArray(options);
+
+//     optionsContainer.innerHTML = "";
+
+//     options.forEach(function (option) {
+//         const button = document.createElement("button");
+
+//         button.classList.add("option-btn");
+//         button.textContent = option;
+
+//         button.addEventListener("click", function () {
+//             checkAnswer(button, option);
+//         });
+
+//         optionsContainer.appendChild(button);
+//     });
+
+//     currentQuestionEl.textContent = currentQuestionIndex + 1;
+//     updateProgressBar();
+
+//     nextBtn.disabled = true;
+// }
+
 function generateQuestion() {
     if (!selectedQuestions || selectedQuestions.length === 0) {
         return;
@@ -147,112 +289,94 @@ function generateQuestion() {
     const currentStrait = selectedQuestions[currentQuestionIndex];
 
     const questionTypes = [
-        "connects_to_strait",
-        "separates_to_strait",
-        "strait_to_connects",
-        "strait_to_separates"
+        "strait_to_details",
+        "details_to_strait"
     ];
 
     const type =
         questionTypes[Math.floor(Math.random() * questionTypes.length)];
 
-    let questionLabel = "";
     let correctAnswer = "";
     let options = [];
 
-    if (type === "connects_to_strait") {
-        const item =
-            currentStrait.connects[
-                Math.floor(Math.random() * currentStrait.connects.length)
-            ];
+    const connectItem =
+        currentStrait.connects[
+            Math.floor(Math.random() * currentStrait.connects.length)
+        ];
 
-        questionLabel = `Which strait connects:`;
-        correctAnswer = currentStrait.name;
+    const separateItem =
+        currentStrait.separates[
+            Math.floor(Math.random() * currentStrait.separates.length)
+        ];
 
-        questionText.innerHTML = `
-            <div class="org-name-en">${item}</div>
-        `;
-    }
-
-    if (type === "separates_to_strait") {
-        const item =
-            currentStrait.separates[
-                Math.floor(Math.random() * currentStrait.separates.length)
-            ];
-
-        questionLabel = `Which strait separates:`;
-        correctAnswer = currentStrait.name;
+    // TYPE 1
+    if (type === "strait_to_details") {
 
         questionText.innerHTML = `
-            <div class="org-name-en">${item}</div>
+            <div class="org-name-en">
+                ${currentStrait.name}
+            </div>
+
+            <div class="org-name-bn">
+                ${currentStrait.name_bn || ""}
+            </div>
         `;
-    }
 
-    if (type === "strait_to_connects") {
-        const item =
-            currentStrait.connects[
-                Math.floor(Math.random() * currentStrait.connects.length)
-            ];
+        correctAnswer = `Connects: ${connectItem}\nSeparates: ${separateItem}`;
+        options = [correctAnswer];
 
-        questionLabel = `${currentStrait.name} connects—`;
-        correctAnswer = item;
+        while (options.length < 4) {
+            let randomStrait =
+                straitsData[Math.floor(Math.random() * straitsData.length)];
 
-        questionText.innerHTML = `
-            <div class="org-name-en">${questionLabel}</div>
-            <div class="org-name-bn">${currentStrait.name_bn || ""}</div>
-        `;
-    }
-
-    if (type === "strait_to_separates") {
-        const item =
-            currentStrait.separates[
-                Math.floor(Math.random() * currentStrait.separates.length)
-            ];
-
-        questionLabel = `${currentStrait.name} separates—`;
-        correctAnswer = item;
-
-        questionText.innerHTML = `
-            <div class="org-name-en">${questionLabel}</div>
-            <div class="org-name-bn">${currentStrait.name_bn || ""}</div>
-        `;
-    }
-
-    currentCorrectAnswer = correctAnswer;
-    options = [correctAnswer];
-
-    while (options.length < 4) {
-        let randomStrait =
-            straitsData[Math.floor(Math.random() * straitsData.length)];
-
-        let wrongAnswer = "";
-
-        if (
-            type === "connects_to_strait" ||
-            type === "separates_to_strait"
-        ) {
-            wrongAnswer = randomStrait.name;
-        }
-
-        if (type === "strait_to_connects") {
-            wrongAnswer =
+            let wrongConnect =
                 randomStrait.connects[
                     Math.floor(Math.random() * randomStrait.connects.length)
                 ];
-        }
 
-        if (type === "strait_to_separates") {
-            wrongAnswer =
+            let wrongSeparate =
                 randomStrait.separates[
                     Math.floor(Math.random() * randomStrait.separates.length)
                 ];
-        }
 
-        if (!options.includes(wrongAnswer)) {
-            options.push(wrongAnswer);
+            let wrongAnswer =
+                `Connects: ${wrongConnect}\nSeparates: ${wrongSeparate}`;
+
+            if (!options.includes(wrongAnswer)) {
+                options.push(wrongAnswer);
+            }
         }
     }
 
+    // TYPE 2
+    if (type === "details_to_strait") {
+
+        questionText.innerHTML = `
+            <div class="org-name-en">
+                Connects: ${connectItem}
+            </div>
+
+            <div class="org-name-bn">
+                Separates: ${separateItem}
+            </div>
+        `;
+
+        correctAnswer = currentStrait.name;
+        options = [correctAnswer];
+
+        while (options.length < 4) {
+            let randomStrait =
+                straitsData[Math.floor(Math.random() * straitsData.length)];
+
+            let wrongAnswer = randomStrait.name;
+
+            if (!options.includes(wrongAnswer)) {
+                options.push(wrongAnswer);
+            }
+        }
+    }
+
+    currentCorrectAnswer = correctAnswer;
     options = shuffleArray(options);
 
     optionsContainer.innerHTML = "";
@@ -261,7 +385,8 @@ function generateQuestion() {
         const button = document.createElement("button");
 
         button.classList.add("option-btn");
-        button.textContent = option;
+
+        button.innerHTML = option.replace(/\n/g, "<br>");
 
         button.addEventListener("click", function () {
             checkAnswer(button, option);
