@@ -126,7 +126,7 @@ const straitsData = [
   },
   {
     name: "Dardanelles Strait",
-    name_bn: "দাদদান্দেনরলস প্রণালী",
+    name_bn: "দার্দানেলীস প্রণালী",
     connects: [
       "Mediterranean/Aegean Sea - Marmara Sea"
     ],
@@ -333,7 +333,7 @@ const straitsData_id = [
   {
     id: 12,
     name: "Dardanelles Strait",
-    name_bn: "দাদদান্দেনরলস প্রণালী",
+    name_bn: "দার্দানেলীস প্রণালী",
     connects: [
       "Mediterranean/Aegean Sea - Marmara Sea"
     ],
