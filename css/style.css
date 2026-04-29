@@ -14,7 +14,8 @@ body {
     color: #222;
     min-height: 100vh;
     padding: 15px;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 
@@ -156,14 +157,15 @@ body {
 
 .question-box {
     background: rgb(255, 173, 251);
-    padding: 25px 20px;
+    padding: 15px 20px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     margin-bottom: 25px;
+    text-align: left;
 }
 
 .org-name-en {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
     /* line-height: 1.5; */
 }
@@ -175,6 +177,37 @@ body {
     font-weight: 800;
 }
 
+.strait-detail {
+    margin: 8px 0;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+/* Labels */
+.connect-label {
+    color: #0ea5e9;
+    font-weight: 700;
+    display: inline-block;
+    min-width: 90px;
+}
+
+.separate-label {
+    color: #ef4444;
+    font-weight: 700;
+    display: inline-block;
+    min-width: 90px;
+}
+
+Values
+.connect-value {
+    color: #111;
+    font-weight: 500;
+}
+
+.separate-value {
+    color: #111;
+    font-weight: 500;
+}
 
 /* =========================
    OPTIONS
@@ -183,12 +216,15 @@ body {
 .options-container {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 10px;
 }
 
 .option-btn {
-    padding: 16px;
-    font-size: 16px;
+    padding: 12px 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: left;
+    color: #000000;
     /* font-weight: bold; */
     /* font-style: italic; */
     border: none;
@@ -206,6 +242,19 @@ body {
     background: #4caf50;
 }
 
+.connect-label {
+    color: #6d0ee9;
+    font-weight: 700;
+    display: inline-block;
+    min-width: 90px;
+}
+
+.separate-label {
+    color: #ef4444;
+    font-weight: 700;
+    display: inline-block;
+    min-width: 90px;
+}
 
 /* =========================
    NEXT BUTTON
@@ -226,6 +275,12 @@ body {
     cursor: pointer;
 }
 
+.navigation-buttons {
+    position: sticky;
+    bottom: 10px;
+    background: #eefaf9;
+    padding-top: 10px;
+}
 
 /* =========================
    RESULT CARD

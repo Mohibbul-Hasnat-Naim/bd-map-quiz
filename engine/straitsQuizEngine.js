@@ -309,9 +309,12 @@ function generateQuestion() {
             Math.floor(Math.random() * currentStrait.separates.length)
         ];
 
-    // TYPE 1
+    /* =========================
+       TYPE 1: STRAIT → DETAILS
+    ========================= */
     if (type === "strait_to_details") {
 
+        // QUESTION: Strait name
         questionText.innerHTML = `
             <div class="org-name-en">
                 ${currentStrait.name}
@@ -322,9 +325,11 @@ function generateQuestion() {
             </div>
         `;
 
+        // ANSWER FORMAT: details combo
         correctAnswer = `Connects: ${connectItem}\nSeparates: ${separateItem}`;
         options = [correctAnswer];
 
+        // WRONG OPTIONS
         while (options.length < 4) {
             let randomStrait =
                 straitsData[Math.floor(Math.random() * straitsData.length)];
@@ -348,22 +353,29 @@ function generateQuestion() {
         }
     }
 
-    // TYPE 2
+    /* =========================
+       TYPE 2: DETAILS → STRAIT
+    ========================= */
     if (type === "details_to_strait") {
 
+        // QUESTION: structured details
         questionText.innerHTML = `
-            <div class="org-name-en">
-                Connects: ${connectItem}
+            <div class="strait-detail">
+                <span class="connect-label">Connects:</span>
+                <span class="connect-value">${connectItem}</span>
             </div>
 
-            <div class="org-name-bn">
-                Separates: ${separateItem}
+            <div class="strait-detail">
+                <span class="separate-label">Separates:</span>
+                <span class="separate-value">${separateItem}</span>
             </div>
         `;
 
+        // ANSWER: strait name
         correctAnswer = currentStrait.name;
         options = [correctAnswer];
 
+        // WRONG OPTIONS
         while (options.length < 4) {
             let randomStrait =
                 straitsData[Math.floor(Math.random() * straitsData.length)];
@@ -376,6 +388,10 @@ function generateQuestion() {
         }
     }
 
+    /* =========================
+       FINAL PROCESSING
+    ========================= */
+
     currentCorrectAnswer = correctAnswer;
     options = shuffleArray(options);
 
@@ -386,7 +402,15 @@ function generateQuestion() {
 
         button.classList.add("option-btn");
 
-        button.innerHTML = option.replace(/\n/g, "<br>");
+        // TYPE-AWARE RENDERING (IMPORTANT FIX)
+        if (type === "strait_to_details") {
+            button.innerHTML = option
+                .replace("Connects:", '<span class="connect-label">Connects:</span>')
+                .replace("Separates:", '<span class="separate-label">Separates:</span>')
+                .replace(/\n/g, "<br>");
+        } else {
+            button.textContent = option;
+        }
 
         button.addEventListener("click", function () {
             checkAnswer(button, option);
@@ -395,9 +419,11 @@ function generateQuestion() {
         optionsContainer.appendChild(button);
     });
 
+    /* =========================
+       UI UPDATE
+    ========================= */
     currentQuestionEl.textContent = currentQuestionIndex + 1;
     updateProgressBar();
-
     nextBtn.disabled = true;
 }
 
