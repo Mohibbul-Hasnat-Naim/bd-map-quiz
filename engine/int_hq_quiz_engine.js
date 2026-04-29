@@ -359,17 +359,19 @@ function buildStartOptions() {
     const total = organizations.length;
 
     const options = [
-        Math.max(1, Math.round(total * 0.25)),
-        Math.max(1, Math.round(total * 0.50)),
-        Math.max(1, Math.round(total * 0.75)),
+        Math.max(1, Math.round(total * 0.20)),
+        Math.max(1, Math.round(total * 0.40)),
+        Math.max(1, Math.round(total * 0.60)),
+        Math.max(1, Math.round(total * 0.80)),
         total
     ];
 
     const labels = [
         "Easy",
-        "Medium",
+        "Beginner",
+        "Intermediate",
         "Hard",
-        "Full"
+        "Expert"
     ];
 
     options.forEach((count, index) => {
