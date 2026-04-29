@@ -277,9 +277,7 @@ function updateTimerDisplay() {
 // }
 
 function generateQuestion() {
-    if (!selectedQuestions || selectedQuestions.length === 0) {
-        return;
-    }
+    if (!selectedQuestions || selectedQuestions.length === 0) return;
 
     if (currentQuestionIndex >= selectedQuestions.length) {
         showFinalResult();
@@ -299,22 +297,16 @@ function generateQuestion() {
     let correctAnswer = "";
     let options = [];
 
-    const connectItem =
-        currentStrait.connects[
-            Math.floor(Math.random() * currentStrait.connects.length)
-        ];
-
-    const separateItem =
-        currentStrait.separates[
-            Math.floor(Math.random() * currentStrait.separates.length)
-        ];
+    // FULL structured values (IMPORTANT FIX)
+    const connectItem = currentStrait.connects.join("; ");
+    const separateItem = currentStrait.separates.join("; ");
 
     /* =========================
        TYPE 1: STRAIT → DETAILS
     ========================= */
     if (type === "strait_to_details") {
 
-        // QUESTION = STRAIT NAME
+        // QUESTION: Strait name
         questionText.innerHTML = `
             <div class="org-name-en">
                 ${currentStrait.name}
@@ -325,27 +317,20 @@ function generateQuestion() {
             </div>
         `;
 
-        // ANSWER = DETAILS
-        correctAnswer = `Connects: ${connectItem}\nSeparates: ${separateItem}`;
+        // ANSWER: full structured details
+        correctAnswer =
+            `Connects: ${connectItem}\nSeparates: ${separateItem}`;
+
         options = [correctAnswer];
 
+        // WRONG OPTIONS (FULL STRUCTURE)
         while (options.length < 4) {
 
             let randomStrait =
                 straitsData[Math.floor(Math.random() * straitsData.length)];
 
-            let wrongConnect =
-                randomStrait.connects[
-                    Math.floor(Math.random() * randomStrait.connects.length)
-                ];
-
-            let wrongSeparate =
-                randomStrait.separates[
-                    Math.floor(Math.random() * randomStrait.separates.length)
-                ];
-
             let wrongAnswer =
-                `Connects: ${wrongConnect}\nSeparates: ${wrongSeparate}`;
+                `Connects: ${randomStrait.connects.join("; ")}\nSeparates: ${randomStrait.separates.join("; ")}`;
 
             if (!options.includes(wrongAnswer)) {
                 options.push(wrongAnswer);
@@ -358,7 +343,7 @@ function generateQuestion() {
     ========================= */
     if (type === "details_to_strait") {
 
-        // QUESTION = DETAILS
+        // QUESTION: full structured details
         questionText.innerHTML = `
             <div class="strait-detail">
                 <span class="connect-label">Connects:</span>
@@ -371,10 +356,11 @@ function generateQuestion() {
             </div>
         `;
 
-        // ANSWER = STRAIT NAME
+        // ANSWER: strait name
         correctAnswer = currentStrait.name;
         options = [correctAnswer];
 
+        // WRONG OPTIONS (STRAIT NAMES)
         while (options.length < 4) {
 
             let randomStrait =
@@ -389,7 +375,7 @@ function generateQuestion() {
     }
 
     /* =========================
-       FINALIZE STATE
+       FINALIZE
     ========================= */
 
     currentCorrectAnswer = correctAnswer;
@@ -397,15 +383,14 @@ function generateQuestion() {
 
     optionsContainer.innerHTML = "";
 
-    options.forEach(function (option) {
+    options.forEach(option => {
         const button = document.createElement("button");
-
         button.classList.add("option-btn");
 
-        // 🔥 CRITICAL FIX: use dataset for logic safety
+        // IMPORTANT: stable logic value
         button.dataset.answer = option;
 
-        // TYPE-AWARE RENDERING
+        // TYPE-BASED RENDERING
         if (type === "strait_to_details") {
             button.innerHTML = option
                 .replace("Connects:", '<span class="connect-label">Connects:</span>')
@@ -415,7 +400,7 @@ function generateQuestion() {
             button.textContent = option;
         }
 
-        button.addEventListener("click", function () {
+        button.addEventListener("click", () => {
             checkAnswer(button, option);
         });
 

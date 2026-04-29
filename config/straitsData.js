@@ -1,5 +1,217 @@
 const straitsData = [
   {
+    id: 1,
+    name: "Bering Strait",
+    name_bn: "বেরিং প্রণালী",
+    connects: [
+      "Bering Sea - Chukchi Sea",
+      "Pacific Ocean - Arctic Ocean"
+    ],
+    separates: [
+      "Russia - USA (Alaska)",
+      "Asia - North America"
+    ]
+  },
+  {
+    id: 2,
+    name: "Malacca Strait",
+    name_bn: "মালাক্কা প্রণালী",
+    connects: [
+      "Andaman Sea - South China Sea",
+      "Indian Ocean - Pacific Ocean"
+    ],
+    separates: [
+      "Indonesia (Sumatra) - Malaysia (Malay Peninsula)",
+      "Asia - Asia"
+    ]
+  },
+  {
+    id: 3,
+    name: "Palk Strait",
+    name_bn: "পক প্রণালী",
+    connects: [
+      "Palk Bay - Gulf of Mannar (Bay of Bengal)",
+      "Indian Ocean - Indian Ocean"
+    ],
+    separates: [
+      "India - Sri Lanka",
+      "Asia - Asia"
+    ]
+  },
+  {
+    id: 4,
+    name: "Strait of Hormuz",
+    name_bn: "হরমুজ প্রণালী",
+    connects: [
+      "Persian Gulf - Gulf of Oman",
+      "Indian Ocean (Arabian Sea) - Indian Ocean"
+    ],
+    separates: [
+      "Iran - Oman/UAE",
+      "Asia - Asia"
+    ]
+  },
+  {
+    id: 5,
+    name: "Bab-el-Mandeb",
+    name_bn: "বাব-এল-মান্দেব",
+    connects: [
+      "Red Sea - Gulf of Aden",
+      "Indian Ocean - Indian Ocean"
+    ],
+    separates: [
+      "Djibouti/Eritrea - Yemen",
+      "Africa - Asia"
+    ]
+  },
+  {
+    id: 6,
+    name: "Strait of Gibraltar",
+    name_bn: "জিব্রাল্টার প্রণালী",
+    connects: [
+      "Mediterranean Sea - Alboran Sea",
+      "Atlantic Ocean - Atlantic Ocean"
+    ],
+    separates: [
+      "Morocco - Spain/UK (Gibraltar)",
+      "Africa - Europe"
+    ]
+  },
+  {
+    id: 7,
+    name: "Bosphorus Strait",
+    name_bn: "বসফরাস প্রণালী",
+    connects: [
+      "Black Sea - Sea of Marmara",
+      "Atlantic Ocean - Atlantic Ocean"
+    ],
+    separates: [
+      "Turkey (European side) - Turkey (Asian side)",
+      "Europe - Asia"
+    ]
+  },
+  {
+    id: 8,
+    name: "Dardanelles Strait",
+    name_bn: "দার্দানেলেস প্রণালী",
+    connects: [
+      "Sea of Marmara - Aegean Sea",
+      "Atlantic Ocean - Atlantic Ocean"
+    ],
+    separates: [
+      "Turkey (Gallipoli) - Turkey (Anatolia)",
+      "Europe - Asia"
+    ]
+  },
+  {
+    id: 9,
+    name: "Strait of Dover",
+    name_bn: "ডোভার প্রণালী",
+    connects: [
+      "English Channel - North Sea",
+      "Atlantic Ocean - Atlantic Ocean"
+    ],
+    separates: [
+      "United Kingdom - France",
+      "Europe - Europe"
+    ]
+  },
+  {
+    id: 10,
+    name: "Florida Strait",
+    name_bn: "ফ্লোরিডা প্রণালী",
+    connects: [
+      "Gulf of Mexico - Atlantic Ocean",
+      "Atlantic Ocean - Atlantic Ocean"
+    ],
+    separates: [
+      "USA (Florida) - Cuba/Bahamas",
+      "North America - North America"
+    ]
+  },
+  {
+    id: 11,
+    name: "Strait of Magellan",
+    name_bn: "ম্যাজেলান প্রণালী",
+    connects: [
+      "Atlantic Ocean - Pacific Ocean",
+      "Atlantic Ocean - Pacific Ocean"
+    ],
+    separates: [
+      "Chile (Mainland) - Tierra del Fuego",
+      "South America - South America"
+    ]
+  },
+  {
+    id: 12,
+    name: "Cook Strait",
+    name_bn: "কুক প্রণালী",
+    connects: [
+      "Tasman Sea - South Pacific Ocean",
+      "Pacific Ocean - Pacific Ocean"
+    ],
+    separates: [
+      "New Zealand (North Island) - New Zealand (South Island)",
+      "Oceania - Oceania"
+    ]
+  },
+  {
+    id: 13,
+    name: "Bass Strait",
+    name_bn: "বাস প্রণালী",
+    connects: [
+      "Tasman Sea - Indian Ocean",
+      "Pacific Ocean - Indian Ocean"
+    ],
+    separates: [
+      "Australia (Mainland) - Tasmania",
+      "Australia - Australia"
+    ]
+  },
+  {
+    id: 14,
+    name: "Taiwan Strait",
+    name_bn: "তাইওয়ান প্রণালী",
+    connects: [
+      "South China Sea - East China Sea",
+      "Pacific Ocean - Pacific Ocean"
+    ],
+    separates: [
+      "China - Taiwan",
+      "Asia - Asia"
+    ]
+  },
+  {
+    id: 15,
+    name: "Tsugaru Strait",
+    name_bn: "সুগারু প্রণালী",
+    connects: [
+      "Sea of Japan - Pacific Ocean",
+      "Pacific Ocean - Pacific Ocean"
+    ],
+    separates: [
+      "Japan (Honshu) - Japan (Hokkaido)",
+      "Asia - Asia"
+    ]
+  },
+  {
+    id: 16,
+    name: "Suez Canal",
+    name_bn: "সুয়েজ খাল",
+    connects: [
+      "Mediterranean Sea - Red Sea",
+      "Atlantic Ocean - Indian Ocean"
+    ],
+    separates: [
+      "Egypt (Africa) - Egypt (Sinai Peninsula)",
+      "Africa - Asia"
+    ]
+  }
+];
+
+
+const straitsData_1 = [
+  {
     name: "Bering Strait",
     name_bn: "বেরিং প্রণালী",
     connects: [
@@ -193,7 +405,7 @@ const straitsData = [
   }
 ];
 
-const straitsData_id = [
+const straitsData_2 = [
   {
     id: 1,
     name: "Bering Strait",
