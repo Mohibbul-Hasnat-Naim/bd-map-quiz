@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD Map Quiz</title>
+    <style>
+        :root {
+            --bd-green: #006a4e;
+            --bd-red: #f42a41;
+            --bg-color: #08c2b8;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            /* background: rgb(56, 226, 112); */
+        }
+
+        .result-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-card {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            width: 350px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .result-card h2 {
+            margin-top: 0;
+            color: var(--bd-green);
+        }
+
+        .result-line {
+            margin: 12px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* --- HUD (Fixed Overlays) --- */
+        .hud-top {
+            position: fixed;
+            top: clamp(10px, 2vw, 20px);
+            left: clamp(10px, 2vw, 20px);
+            right: clamp(10px, 2vw, 20px);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: clamp(10px, 2vw, 20px);
+
+            pointer-events: none;
+            z-index: 100;
+            /* background: #0004fd; */
+        }
+
+        .hud-vertical {
+            position: fixed;
+            right: clamp(10px, 2vw, 20px);
+            top: clamp(150px, 12vh, 140px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 300;
+            max-height: calc(100vh - 120px);
+
+            /* background: #08c2b8; */
+        }
+
+        .hud-vertical button {
+            width: clamp(90px, 10vw, 140px);
+            padding: clamp(8px, 1vw, 12px);
+            font-size: clamp(0.75rem, 1vw, 1rem);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            border: none;
+        }
+
+        .card {
+            background: white;
+            padding: clamp(8px, 1.2vw, 14px) clamp(5px, 1.8vw, 20px);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            pointer-events: none;
+            max-width: 45vw;
+            width: fit-content;
+            font-weight: bold;
+        }
+
+        .hud-top .card:first-child {
+            min-width: clamp(180px, 30vw, 200px);
+        }
+
+        #target-name {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 800;
+            color: var(--bd-green);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .stats-area {
+            text-align: left;
+            font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+            min-width: clamp(160px, 22vw, 250px);
+            /* background: #111; */
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 4px;
+            gap: 10px;
+            opacity: 1;
+            /* background: #111; */
+        }
+
+        #status-msg {
+            font-weight: bold;
+            height: 24px;
+            line-height: 24px;
+            margin: 5px 0;
+            font-size: clamp(1rem, 2vw, 1rem);
+            transition: opacity 0.3s;
+            opacity: 0;
+            text-align: left;
+        }
+
+        .btn-group {
+            display: flex; 
+            gap: 8px; 
+            margin-top: 10px; 
+            justify-content: flex-end; 
+            /* background-color: #f71919; */
+        }
+        
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(241, 4, 4, 0.08);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            
+            background-color: #f71919;
+        }
+  
+        .btn-home {
+            background: #34495e;
+        }
+        
+        .hud-vertical .btn-sound { background: #006a4e;}
+        .hud-vertical .btn-label { background: var(--bg-color);}
+
+        .hud-vertical .btn-skip {
+            background: #e74c3c;
+        }
+
+        .hud-vertical .btn-restart {
+            background: #27ae60;
+        }
+
+        .hud-vertical .btn-learn {
+            background: #8d6442;
+        }
+
+        /* --- MAP CONTAINER --- */
+        .map-viewport {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            /* background: #0004fd; */
+        }
+
+        .map-viewport:active {
+            cursor: grabbing;
+        }
+
+        svg {
+            height: 100%;
+            width: 100%;
+            max-width: none;
+        }
+
+        .map-region path {
+            cursor: pointer;
+            transition: all 0.25s ease;
+            stroke: #ff0000;
+            stroke-width: 1.5;
+        }
+
+        .map-region:not(.locked):not(.selected):hover path {
+            opacity: .4;
+        }
+
+        .selected path {
+            stroke: #ffb300;
+            stroke-width: 3;
+            opacity: 1;
+        }
+
+        .locked path {
+            /* fill: rgb(51, 240, 44) !important; */
+            stroke: blueviolet !important;
+            stroke-width: 1.5;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .learn-mode .map-region path {
+            stroke: #333 !important;
+            stroke-width: 2.5;
+            opacity: 0.95;
+            pointer-events: none;
+        }
+
+        .division-label {
+            display: none;
+            font-size: 12px;
+            font-weight: 800;
+            fill: #000000;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+
+            /* Better readability */
+            paint-order: stroke;
+            stroke: white;
+            stroke-width: 3px;
+            stroke-linejoin: round;
+        }
+
+        /* Show labels in learn, normal mode */
+        .learn-mode .division-label,
+        .show-labels .division-label {
+            display: block;
+        }
+
+        .map-region path {
+            transform-origin: center;
+        }
+
+        .map-region:not(.locked):not(.selected):hover path {
+            transform: scale(1.01);
+        }
+
+        .locked path {
+            filter: brightness(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="result-modal" class="result-modal">
+        <div class="result-card">
+            <h2>QUIZ COMPLETED</h2>
+
+            <div class="result-line">
+                Time: <span id="final-time">00:00</span>
+            </div>
+
+            <div class="result-line">
+                Correct: <span id="final-correct">0</span>
+            </div>
+
+            <div class="result-line">
+                Attempts: <span id="final-attempts">0</span>
+            </div>
+
+            <div class="result-line">
+                Skipped: <span id="final-skipped">0</span>
+            </div>
+
+            <div class="result-line">
+                Accuracy: <span id="final-accuracy">0%</span>
+            </div>
+
+            <div class="btn-group" style="justify-content:center; margin-top:20px;">
+                <button class="btn-learn" style="background: rgb(30, 245, 48); display: block;" onclick="resetGame()">Play Again</button>
+                <button class="btn-back" style="background: rgb(1, 211, 248); display:block;" onclick="toggleMode(true)">Learn Map</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-top">
+        <div class="card">
+            <small style="color:#0004fd">FIND THE COUNTRY</small>
+            <span id="target-name">...</span>
+            <div id="status-msg">Correct!</div>
+        </div>
+
+        <div class="card stats-area">
+            <div class="stats-row">
+                <span>Score: </span>
+                <b id="score">0/0</b>
+            </div>
+
+            <div class="stats-row">
+                <span>Attempts: </span>
+                <b id="attempts">0</b>
+            </div>
+
+            <div class="stats-row">
+                <span>Time: </span>
+                <b id="live-timer">00:00</b>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-vertical">
+        <button class="btn-skip" onclick="skipQuestion()">Skip</button>        
+        <button class="btn-restart" onclick="resetGame()">Restart</button>
+        <button class="btn-label" id="label-toggle" onclick="toggleLabels()">🏷 Labels OFF</button>
+        <button class="btn-sound" id="sound-toggle" onclick="toggleSound()">🔊 Sound ON</button>
+        <button class="btn-learn" id="mode-btn" onclick="toggleMode(true)">Learn Map</button>
+        <button class="btn-home" 
+        onclick="window.location.href='../index.html'">
+            Home
+        </button>
+    </div>
+
+    <div class="map-viewport" id="map-viewport">
+        <svg
+            viewBox="0 0 2000 857"
+            xmlns="http://www.w3.org/2000/svg"
+            id="main-svg"
+        >
+            <g id="map-layer"></g>
+        </svg>
+    </div>
+</body>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script type="module">
+        import { startQuiz } from "../engine/quizEngine.js";
+        import { getWorldMap } from "../maps/world_map.js";
+
+        startQuiz({
+            mapDataProvider: getWorldMap,
+            sounds: {
+                correct: new Audio("../sounds/correct.mp3"),
+                wrong: new Audio("../sounds/wrong.mp3"),
+                skip: new Audio("../sounds/skip.mp3"),
+                victory: new Audio("../sounds/victory.mp3"),
+                mode: new Audio("../sounds/mode.mp3")
+            }
+        });
+    </script>
+</html>
