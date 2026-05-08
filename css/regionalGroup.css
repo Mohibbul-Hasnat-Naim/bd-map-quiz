@@ -226,12 +226,38 @@ svg {
     filter: brightness(1.05);
     pointer-events: none;
 }
-
+/* 
 .learn-mode .map-region path {
     stroke: #333 !important;
     stroke-width: 2.5;
     opacity: 0.95;
     pointer-events: none;
+} */
+/* 
+.learn-mode .map-region.learn-active path {
+    stroke: #000;
+    stroke-width: 2.5;
+    opacity: 1;
+} */
+
+/* default state */
+.map-region path {
+    transition: 0.1s ease;
+}
+
+/* dim all non-group countries */
+.learn-mode .learn-dim path {
+    opacity: 0.15;
+    fill: #999 !important;
+    stroke: #666 !important;
+}
+
+/* highlight group countries */
+.learn-mode .learn-focus path {
+    opacity: 1;
+    fill: #7ed957 !important;
+    stroke: #000 !important;
+    stroke-width: 2.5;
 }
 
 .division-label {

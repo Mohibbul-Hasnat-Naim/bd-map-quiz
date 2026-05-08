@@ -114,7 +114,6 @@ export const aliases = {
     "timor leste": "timor-leste"
 };
 
-
 export const asiaCountries = [
     "afghanistan",
     "armenia",

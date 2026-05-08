@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Regional Groups Quiz</title>
+
+    <link rel="stylesheet" href="../css/regionalGroup.css">
+
+    <link rel="stylesheet" href="../css/preloading bar.css">
+</head>
+
+<body>
+
+    <!-- RESULT MODAL -->
+    <div id="result-modal" class="result-modal">
+        <div class="result-card">
+
+            <h2>GROUP COMPLETED</h2>
+
+            <div class="result-line">
+                Group:
+                <span id="final-group">ASEAN</span>
+            </div>
+
+            <div class="result-line">
+                Time:
+                <span id="final-time">00:00</span>
+            </div>
+
+            <div class="result-line">
+                Found:
+                <span id="final-correct">0</span>
+            </div>
+
+            <div class="result-line">
+                Wrong:
+                <span id="final-attempts">0</span>
+            </div>
+
+            <div class="result-line">
+                Accuracy:
+                <span id="final-accuracy">0%</span>
+            </div>
+
+            <div class="btn-group" style="justify-content:center; margin-top:20px;">
+
+                <button class="btn-learn" style="background:#1ef530;" onclick="resetGame()">
+
+                    Play Again
+                </button>
+
+                <button class="btn-back" id="mode-btn" style="background:#01d3f8;" onclick="toggleMode()">
+
+                    Learn Map
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP HUD -->
+    <div class="hud-top">
+
+        <div class="card">
+
+            <small style="color:#0004fd">
+                SELECT ALL COUNTRIES IN
+            </small>
+
+            <span id="target-name">
+                ASEAN
+            </span>
+
+            <div id="status-msg">
+                Correct!
+            </div>
+
+        </div>
+
+        <div class="card stats-area">
+
+            <div class="stats-row">
+                <span>Found:</span>
+                <b id="score">0/0</b>
+            </div>
+
+            <div class="stats-row">
+                <span>Wrong:</span>
+                <b id="attempts">0</b>
+            </div>
+
+            <div class="stats-row">
+                <span>Remaining:</span>
+                <b id="remaining-count">0</b>
+            </div>
+
+            <div class="stats-row">
+                <span>Time:</span>
+                <b id="live-timer">00:00</b>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RIGHT HUD -->
+    <div class="hud-vertical">
+
+        <!-- ONLY GROUP SELECTOR -->
+        <select id="group-selector" onchange="changeGroup(this.value)">
+
+            <optgroup label="Asia">
+
+                <option value="saarc">SAARC</option>
+                <option value="asean">ASEAN</option>
+
+            </optgroup>
+
+            <optgroup label="Global">
+
+                <option value="g20">G20</option>
+                <option value="brics">BRICS</option>
+                <option value="nato">NATO</option>
+
+            </optgroup>
+
+        </select>
+
+        <button class="btn-restart" onclick="resetGame()">
+
+            Restart
+        </button>
+
+    </div>
+
+    <!-- BOTTOM HUD -->
+    <div class="hud-horizontal">
+
+        <button class="btn-sound" id="sound-toggle" onclick="toggleSound()">
+
+            🔊 Sound ON
+        </button>
+
+        <button class="btn-label" id="label-toggle" onclick="toggleLabels()">
+
+            🏷 Labels OFF
+        </button>
+
+        <button class="btn-learn" id="mode-btn" onclick="toggleMode()">
+
+            Learn Map
+        </button>
+
+        <button class="btn-home" onclick="window.location.href='../index.html'">
+
+            Home
+        </button>
+
+    </div>
+
+    <!-- WORLD MAP -->
+    <div class="map-viewport" id="map-viewport">
+
+        <svg viewBox="0 0 2000 857" xmlns="http://www.w3.org/2000/svg" id="main-svg">
+
+            <g id="map-layer"></g>
+
+        </svg>
+
+    </div>
+
+</body>
+
+<!-- PRELOADER -->
+<script type="module">
+    import { initLoader }
+        from '../config/preloading bar.js';
+
+    initLoader();
+</script>
+
+<!-- GROUP ONLY (NO MAP SWITCHING) -->
+<script>
+    window.changeGroup = function (groupName) {
+        const params = new URLSearchParams(window.location.search);
+
+        params.set("group", groupName);
+
+        window.location.search = params.toString();
+    };
+</script>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<!-- ENGINE INIT -->
+<script type="module">
+
+    import { getWorldMap }
+        from "../maps/worldMapQuiz.js";
+
+    import { startRegionalQuiz }
+        from "../engine/regionalQuizEngine.js";
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const selectedGroup =
+        params.get("group") || "saarc";
+
+    document.getElementById("group-selector").value =
+        selectedGroup;
+
+    startRegionalQuiz({
+        mapDataProvider: getWorldMap, // ONLY WORLD MAP
+        selectedGroup,
+        sounds: {
+            correct: new Audio("../sounds/correct.mp3"),
+            wrong: new Audio("../sounds/wrong.mp3"),
+            victory: new Audio("../sounds/victory.mp3"),
+            mode: new Audio("../sounds/mode.mp3")
+        }
+    });
+
+</script>
+
+</html>
